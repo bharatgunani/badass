@@ -1,0 +1,28 @@
+<?php
+/**
+ * Copyright © 2015 MageWorx. All rights reserved.
+ * See LICENSE.txt for license details.
+ */
+?>
+
+
+<?php $items = $block->getProductCollection(); ?>
+<?php
+/* Custom  Coding By Web India */
+$count = 0;
+?>
+<?php if (!empty($items)): ?>
+    <ul class="products content" data-role="content" data-toggle="switch">
+        <?php foreach ($items as $item): ?>
+            <?php if ($count <= 5) { ?>
+                <li class="product">
+                    <a href="<?php echo $block->escapeUrl($item->getUrl()) ?>"><?php echo $block->escapeHtml($item->getName()) ?></a>
+                </li>
+                <?php $count = $count + 1; ?>
+            <?php } ?>
+        <?php endforeach; ?>
+    </ul>
+    <?php
+
+
+ endif ?>

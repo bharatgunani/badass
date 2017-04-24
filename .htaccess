@@ -1,0 +1,932 @@
+# All explanations you could find in .htaccess.sample file
+DirectoryIndex index.php
+<IfModule mod_php5.c>
+    php_value memory_limit 768M
+    php_value max_execution_time 18000
+    php_flag session.auto_start off
+    php_flag suhosin.session.cryptua off
+</IfModule>
+<IfModule mod_php7.c>
+    php_value memory_limit 768M
+    php_value max_execution_time 18000
+    php_flag session.auto_start off
+    php_flag suhosin.session.cryptua off
+</IfModule>
+<IfModule mod_security.c>
+    SecFilterEngine Off
+    SecFilterScanPOST Off
+</IfModule>
+<IfModule mod_ssl.c>
+    SSLOptions StdEnvVars
+</IfModule>
+<IfModule mod_rewrite.c>
+    Options +FollowSymLinks
+    RewriteEngine on
+RewriteCond %{REQUEST_URI} !^/[0-9]+\..+\.cpaneldcv$
+RewriteCond %{REQUEST_URI} !^/[A-F0-9]{32}\.txt(?:\ Comodo\ DCV)?$
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+    RewriteCond %{REQUEST_METHOD} ^TRAC[EK]
+RewriteCond %{REQUEST_URI} !^/[0-9]+\..+\.cpaneldcv$
+RewriteCond %{REQUEST_URI} !^/[A-F0-9]{32}\.txt(?:\ Comodo\ DCV)?$
+    RewriteRule .* - [L,R=405]
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-l
+RewriteCond %{REQUEST_URI} !^/[0-9]+\..+\.cpaneldcv$
+RewriteCond %{REQUEST_URI} !^/[A-F0-9]{32}\.txt(?:\ Comodo\ DCV)?$
+    RewriteRule .* index.php [L]
+</IfModule>
+    AddDefaultCharset Off
+    AddType 'text/html; charset=UTF-8' html
+<IfModule mod_expires.c>
+    ExpiresDefault "access plus 1 year"
+    ExpiresByType text/html A0
+    ExpiresByType text/plain A0
+</IfModule>
+    RedirectMatch 403 /\.git
+    <Files composer.json>
+        order allow,deny
+        deny from all
+    </Files>
+    <Files composer.lock>
+        order allow,deny
+        deny from all
+    </Files>
+    <Files .gitignore>
+        order allow,deny
+        deny from all
+    </Files>
+    <Files .htaccess>
+        order allow,deny
+        deny from all
+    </Files>
+    <Files .htaccess.sample>
+        order allow,deny
+        deny from all
+    </Files>
+    <Files .php_cs>
+        order allow,deny
+        deny from all
+    </Files>
+    <Files .travis.yml>
+        order allow,deny
+        deny from all
+    </Files>
+    <Files CHANGELOG.md>
+        order allow,deny
+        deny from all
+    </Files>
+    <Files CONTRIBUTING.md>
+        order allow,deny
+        deny from all
+    </Files>
+    <Files COPYING.txt>
+        order allow,deny
+        deny from all
+    </Files>
+    <Files Gruntfile.js>
+        order allow,deny
+        deny from all
+    </Files>
+    <Files LICENSE.txt>
+        order allow,deny
+        deny from all
+    </Files>
+    <Files LICENSE_AFL.txt>
+        order allow,deny
+        deny from all
+    </Files>
+    <Files nginx.conf.sample>
+        order allow,deny
+        deny from all
+    </Files>
+    <Files package.json>
+        order allow,deny
+        deny from all
+    </Files>
+    <Files php.ini.sample>
+        order allow,deny
+        deny from all
+    </Files>
+    <Files README.md>
+        order allow,deny
+        deny from all
+    </Files>
+    <Files magento_umask>
+        order allow,deny
+        deny from all
+    </Files>
+ErrorDocument 404 /pub/errors/404.php
+ErrorDocument 403 /pub/errors/404.php
+<IfModule mod_headers.c>
+    Header set X-UA-Compatible "IE=edge"
+    <FilesMatch "\.(appcache|atom|bbaw|bmp|crx|css|cur|eot|f4[abpv]|flv|geojson|gif|htc|ico|jpe?g|js|json(ld)?|m4[av]|manifest|map|mp4|oex|og[agv]|opus|otf|pdf|png|rdf|rss|safariextz|svgz?|swf|topojson|tt[cf]|txt|vcard|vcf|vtt|webapp|web[mp]|webmanifest|woff2?|xloc|xml|xpi)$">
+        Header unset X-UA-Compatible
+    </FilesMatch>
+</IfModule>
+<IfModule mod_deflate.c>
+  # Compress HTML, CSS, JavaScript, Text, XML and fonts
+  AddOutputFilterByType DEFLATE application/javascript
+  AddOutputFilterByType DEFLATE application/rss+xml
+  AddOutputFilterByType DEFLATE application/vnd.ms-fontobject
+  AddOutputFilterByType DEFLATE application/x-font
+  AddOutputFilterByType DEFLATE application/x-font-opentype
+  AddOutputFilterByType DEFLATE application/x-font-otf
+  AddOutputFilterByType DEFLATE application/x-font-truetype
+  AddOutputFilterByType DEFLATE application/x-font-ttf
+  AddOutputFilterByType DEFLATE application/x-javascript
+  AddOutputFilterByType DEFLATE application/xhtml+xml
+  AddOutputFilterByType DEFLATE application/xml
+  AddOutputFilterByType DEFLATE font/opentype
+  AddOutputFilterByType DEFLATE font/otf
+  AddOutputFilterByType DEFLATE font/ttf
+  AddOutputFilterByType DEFLATE image/svg+xml
+  AddOutputFilterByType DEFLATE image/x-icon
+  AddOutputFilterByType DEFLATE text/css
+  AddOutputFilterByType DEFLATE text/html
+  AddOutputFilterByType DEFLATE text/javascript
+  AddOutputFilterByType DEFLATE text/plain
+  AddOutputFilterByType DEFLATE text/xml
+
+  # Remove browser bugs (only needed for really old browsers)
+  BrowserMatch ^Mozilla/4 gzip-only-text/html
+  BrowserMatch ^Mozilla/4\.0[678] no-gzip
+  BrowserMatch \bMSIE !no-gzip !gzip-only-text/html
+  Header append Vary User-Agent
+</IfModule>
+<IfModule mod_headers.c>
+    # Serve gzip compressed CSS files if they exist 
+    # and the client accepts gzip.
+    RewriteCond "%{HTTP:Accept-encoding}" "gzip"
+    RewriteCond "%{REQUEST_FILENAME}\.gz" -s
+RewriteCond %{REQUEST_URI} !^/[0-9]+\..+\.cpaneldcv$
+RewriteCond %{REQUEST_URI} !^/[A-F0-9]{32}\.txt(?:\ Comodo\ DCV)?$
+    RewriteRule "^(.*)\.css" "$1\.css\.gz" [QSA]
+
+    # Serve gzip compressed JS files if they exist 
+    # and the client accepts gzip.
+    RewriteCond "%{HTTP:Accept-encoding}" "gzip"
+    RewriteCond "%{REQUEST_FILENAME}\.gz" -s
+RewriteCond %{REQUEST_URI} !^/[0-9]+\..+\.cpaneldcv$
+RewriteCond %{REQUEST_URI} !^/[A-F0-9]{32}\.txt(?:\ Comodo\ DCV)?$
+    RewriteRule "^(.*)\.js" "$1\.js\.gz" [QSA]
+
+    # Serve correct content types, and prevent mod_deflate double gzip.
+RewriteCond %{REQUEST_URI} !^/[0-9]+\..+\.cpaneldcv$
+RewriteCond %{REQUEST_URI} !^/[A-F0-9]{32}\.txt(?:\ Comodo\ DCV)?$
+    RewriteRule "\.css\.gz$" "-" [T=text/css,E=no-gzip:1]
+RewriteCond %{REQUEST_URI} !^/[0-9]+\..+\.cpaneldcv$
+RewriteCond %{REQUEST_URI} !^/[A-F0-9]{32}\.txt(?:\ Comodo\ DCV)?$
+    RewriteRule "\.js\.gz$" "-" [T=text/javascript,E=no-gzip:1]
+
+    <FilesMatch "(\.js\.gz|\.css\.gz)$">
+      # Serve correct encoding type.
+      Header append Content-Encoding gzip
+
+      # Force proxies to cache gzipped & 
+      # non-gzipped css/js files separately.
+      Header append Vary Accept-Encoding
+    </FilesMatch>
+</IfModule>
+
+# BEGIN Compress text files
+<ifModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/xml text/css text/plain
+  AddOutputFilterByType DEFLATE image/svg+xml application/xhtml+xml application/xml
+  AddOutputFilterByType DEFLATE application/rdf+xml application/rss+xml application/atom+xml
+  AddOutputFilterByType DEFLATE text/javascript application/javascript application/x-javascript application/json
+  AddOutputFilterByType DEFLATE application/x-font-ttf application/x-font-otf
+  AddOutputFilterByType DEFLATE font/truetype font/opentype
+</ifModule>
+# END Compress text files
+
+# BEGIN Expire headers
+<ifModule mod_expires.c>
+  ExpiresActive On
+  ExpiresDefault "access plus 5 seconds"
+  ExpiresByType image/x-icon "access plus 2592000 seconds"
+  ExpiresByType image/jpeg "access plus 2592000 seconds"
+  ExpiresByType image/png "access plus 2592000 seconds"
+  ExpiresByType image/gif "access plus 2592000 seconds"
+  ExpiresByType application/x-shockwave-flash "access plus 2592000 seconds"
+  ExpiresByType text/css "access plus 604800 seconds"
+  ExpiresByType text/javascript "access plus 216000 seconds"
+  ExpiresByType application/javascript "access plus 216000 seconds"
+  ExpiresByType application/x-javascript "access plus 216000 seconds"
+  ExpiresByType text/html "access plus 600 seconds"
+  ExpiresByType application/xhtml+xml "access plus 600 seconds"
+</ifModule>
+# END Expire headers
+
+# BEGIN Cache-Control Headers
+<ifModule mod_headers.c>
+  <filesMatch "\.(ico|jpe?g|png|gif|swf)$">
+    Header set Cache-Control "public"
+  </filesMatch>
+  <filesMatch "\.(css)$">
+    Header set Cache-Control "public"
+  </filesMatch>
+  <filesMatch "\.(js)$">
+    Header set Cache-Control "private"
+  </filesMatch>
+  <filesMatch "\.(x?html?|php)$">
+    Header set Cache-Control "private, must-revalidate"
+  </filesMatch>
+</ifModule>
+# END Cache-Control Headers
+
+# BEGIN Turn ETags Off
+FileETag None
+# END Turn ETags Off
+
+# 404 Page Redirection
+
+redirect 301 /about https://www.badassoutdoorgear.com/about-us/bad-ass-outdoor-gear.html/
+redirect 301 /links https://www.badassoutdoorgear.com/about-us/store-locations.html/
+redirect 301 /Contact https://www.badassoutdoorgear.com/contacts/
+redirect 301 /specials https://www.badassoutdoorgear.com/best-sellers.html/
+redirect 301 /returnpolicy https://www.badassoutdoorgear.com/support/return-policy.html/
+redirect 301 /terms https://www.badassoutdoorgear.com/support/terms-of-use.html/
+redirect 301 /privacypolicy https://www.badassoutdoorgear.com/support/privacy-policy.html/
+#redirect 301 /category https://www.badassoutdoorgear.com/
+#redirect 301 /products/ https://www.badassoutdoorgear.com/products/product-brands.html/
+#redirect 301 /brands https://www.badassoutdoorgear.com/products/product-brands.html/
+redirect 301 /product/superday https://www.badassoutdoorgear.com/superday.html
+redirect 301 /secure/cart https://www.badassoutdoorgear.com/checkout/cart/
+redirect 301 /category/clothing https://www.badassoutdoorgear.com/clothing-for-hunters.html
+redirect 301 /brands/A https://www.badassoutdoorgear.com/products/product-brands.html/
+redirect 301 /brand/Badlands https://www.badassoutdoorgear.com/products/product-brands.html/
+redirect 301 /brands/G https://www.badassoutdoorgear.com/products/product-brands.html/
+redirect 301 /brand/Eberlestock https://www.badassoutdoorgear.com/products/product-brands.html/
+#redirect 301 /category/gear https://www.badassoutdoorgear.com/hunting-gear-products.html
+redirect 301 /gear.html/ https://www.badassoutdoorgear.com/hunting-gear-products.html
+redirect 301 /brand/iScope https://www.badassoutdoorgear.com/products/product-brands.html/
+redirect 301 /products/new https://www.badassoutdoorgear.com/sitemap
+redirect 301 /category/backpacks https://www.badassoutdoorgear.com/backpacks.html
+redirect 301 /brand/Geigerrig https://www.badassoutdoorgear.com/products/product-brands.html/
+redirect 301 /brands/S https://www.badassoutdoorgear.com/products/product-brands.html/
+redirect 301 /category/optics https://www.badassoutdoorgear.com/optics-for-hunting.html
+redirect 301 /category/archery https://www.badassoutdoorgear.com/archery-products.html
+redirect 301 /brands/K https://www.badassoutdoorgear.com/products/product-brands.html/
+redirect 301 /brands/M https://www.badassoutdoorgear.com/products/product-brands.html/
+redirect 301 /product/eberlestock-operator https://www.badassoutdoorgear.com/eberlestock-h20-bladder.html
+redirect 301 /brand/obsession-bows https://www.badassoutdoorgear.com/products/product-brands.html/
+redirect 301 /products/gear/decals https://www.badassoutdoorgear.com/hunting-gear-products.html
+redirect 301 /product/game-shears https://www.badassoutdoorgear.com/hunting-gear-products.html
+redirect 301 /products/clothing/shirts https://www.badassoutdoorgear.com/clothing-for-hunters/shirts.html
+redirect 301 /brand/g5-outdoors https://www.badassoutdoorgear.com/products/product-brands.html/
+redirect 301 /brand/core4-element https://www.badassoutdoorgear.com/products/product-brands.html/
+redirect 301 /brand/deadeye+outfitters https://www.badassoutdoorgear.com/products/product-brands.html/
+redirect 301 /camo-pattern-comparisons/ https://www.badassoutdoorgear.com/camo-patterns-color.html
+redirect 301 /brand/stormkloth-ii https://www.badassoutdoorgear.com/products/product-brands.html/
+redirect 301 /product/kestrel-pouch https://www.badassoutdoorgear.com/kestrel-pouch.html
+#redirect 301 /products/clothing/accessories https://www.badassoutdoorgear.com/clothing-for-hunters/clothing-accessories.html
+redirect 301 /category/optics-accessories https://www.badassoutdoorgear.com/optics-for-hunting/optics-adapters-accessories-for-hunting.html
+redirect 301 /products/backpacks/tactical https://www.badassoutdoorgear.com/backpacks/tactical-packs.html
+redirect 301 /products/clothing/waterproof https://www.badassoutdoorgear.com/clothing-for-hunters/waterproof.html
+redirect 301 /product/mutton-legging https://www.badassoutdoorgear.com/clothing-for-hunters/merino-wool-layers/bottoms/mutton-legging.html
+#redirect 301 /products/archery/accessories https://www.badassoutdoorgear.com/archery-products/accessories.html
+redirect 301 /category/clothing/accessories https://www.badassoutdoorgear.com/clothing-for-hunters/clothing-accessories.html
+redirect 301 /category/gift-ideas https://www.badassoutdoorgear.com/gift-ideas-under-60.html
+redirect 301 /category/archery/accessories https://www.badassoutdoorgear.com/archery-products/accessories.html
+redirect 301 /product/brambler-gaiter https://www.badassoutdoorgear.com/clothing-for-hunters/clothing-accessories/socks-boot-gaiters/brambler-gaiter.html
+redirect 301 /products/archery/broadheads https://www.badassoutdoorgear.com/archery-products/broadheads.html
+redirect 301 /product/mini-me https://www.badassoutdoorgear.com/hunting-gear-products/hunting-knives.html
+redirect 301 /products/clothing/youth https://www.badassoutdoorgear.com/clothing-for-hunters/youth.html
+redirect 301 /product/merino-beanie https://www.badassoutdoorgear.com/merino-2590-beanie-sale.html
+redirect 301 /buy/shop/discount https://www.badassoutdoorgear.com/
+redirect 301 /product/tracker-glove https://www.badassoutdoorgear.com/clothing-for-hunters/clothing-accessories/gloves-belts.html
+redirect 301 /products/archery/decoys https://www.badassoutdoorgear.com/archery-products/decoys.html
+redirect 301 /category/electric-bikes https://www.badassoutdoorgear.com/hunting-gear-products/electric-bikes.html
+redirect 301 /category/womens-gear https://www.badassoutdoorgear.com/hunting-gear-products.html
+redirect 301 /product/ladder-panel https://www.badassoutdoorgear.com/backpacks/h20-bladders-filters.html
+redirect 301 /category/sale/clothing https://www.badassoutdoorgear.com/clothing-for-hunters.html
+redirect 301 /products/clothing/pants https://www.badassoutdoorgear.com/clothing-for-hunters/lightweight-pants.html
+redirect 301 /product/bear-moment https://www.badassoutdoorgear.com/archery-products/compound-bows.html
+redirect 301 /products/gear/knives https://www.badassoutdoorgear.com/hunting-gear-products/hunting-knives.html
+redirect 301 /products/sale/closeouts https://www.badassoutdoorgear.com/
+redirect 301 /product/diablo-dos https://www.badassoutdoorgear.com/diablo-dos.html
+redirect 301 /product/first-lite-beanie https://www.badassoutdoorgear.com/first-lite-beanie.html
+redirect 301 /product/high-uintas-jacket https://www.badassoutdoorgear.com/high-uintas-jacket.html
+redirect 301 /brand/Leica%20Optics https://www.badassoutdoorgear.com/optics-for-hunting.html
+redirect 301 /product/easton-cross-shot https://www.badassoutdoorgear.com/easton-cross-shot.html
+redirect 301 /products/sale/clothing/tops https://www.badassoutdoorgear.com/clothing-for-hunters/merino-wool-layers/tops.html
+redirect 301 /brand/StormKloth%20II https://www.badassoutdoorgear.com/products/product-brands.html/
+redirect 301 /product/exo-pant-approach https://www.badassoutdoorgear.com/exo-pant-approach.html
+redirect 301 /products/archery/youth-bows https://www.badassoutdoorgear.com/archery-products/youth-bows.html
+redirect 301 /product/core4-talus-belt- https://www.badassoutdoorgear.com/core4-talus-belt.html
+redirect 301 /category/backpacks/hunting-packs https://www.badassoutdoorgear.com/backpacks/hunting-packs.html
+redirect 301 /category/clothing/casual-apparel https://www.badassoutdoorgear.com/clothing-for-hunters/casual-apparel.html
+redirect 301 /brand/FHF%20Gear https://www.badassoutdoorgear.com/products/product-brands.html/
+redirect 301 /product/badlands-rangefinder-case https://www.badassoutdoorgear.com/badlands-rangefinder-case.html
+redirect 301 /products/backpacks/easton-packs https://www.badassoutdoorgear.com/backpacks.html
+redirect 301 /brand/First%20Lite https://www.badassoutdoorgear.com/products/product-brands.html/
+redirect 301 /product/badlands-bino-x https://www.badassoutdoorgear.com/badlands-bino-x.html
+redirect 301 /products/gear/game-calls https://www.badassoutdoorgear.com/hunting-gear-products.html
+redirect 301 /product/elevation-jacket-charcoal https://www.badassoutdoorgear.com/elevation-jacket-charcoal.html
+redirect 301 /product/badlands-laptop-bag https://www.badassoutdoorgear.com/badlands-laptop-bag.html
+redirect 301 /products/optics-accessories/rangefinders https://www.badassoutdoorgear.com/optics-for-hunting/rangefinders-for-hunting.html
+redirect 301 /product/obsession-huntress-lx https://www.badassoutdoorgear.com/archery-products/compound-bows/obsession-defcon-m7.html
+redirect 301 /product/logo-window-decal- https://www.badassoutdoorgear.com/logo-window-decal.html
+redirect 301 /product/merino-wool-zip https://www.badassoutdoorgear.com/merino-wool-zip.html
+redirect 301 /brand/Deadeye%20Outfitters https://www.badassoutdoorgear.com/products/product-brands.html/
+redirect 301 /product/badlands-bino-z https://www.badassoutdoorgear.com/badlands-bino-z.html
+redirect 301 /product/ballistic-velocity-monopod https://www.badassoutdoorgear.com/
+redirect 301 /product/womens-artemis-hoody https://www.badassoutdoorgear.com/womens-artemis-hoody.html
+redirect 301 /product/badlands-bino-straps https://www.badassoutdoorgear.com/badlands-bino-straps.html
+redirect 301 /products/backpacks/fanny-packs https://www.badassoutdoorgear.com/backpacks/fanny-packs.html
+redirect 301 /SiteMapGoogle.aspx https://www.badassoutdoorgear.com/sitemap
+redirect 301 /product/obsession-defcon-m7 https://www.badassoutdoorgear.com/obsession-defcon-m7.html
+redirect 301 /products/clothing/accessories/gloves https://www.badassoutdoorgear.com/clothing-for-hunters/clothing-accessories/gloves-belts.html
+redirect 301 /product/speed-goat-decoy https://www.badassoutdoorgear.com/speed-goat-decoy.html
+redirect 301 /product/womens-bowhunter-1800 https://www.badassoutdoorgear.com/womens-bowhunter-1800.html
+redirect 301 /product/salomon-speedtrack-shoe https://www.badassoutdoorgear.com/salomon-speedtrack-shoe.html
+redirect 301 /products/archery/compound-bows https://www.badassoutdoorgear.com/archery-products/compound-bows.html
+redirect 301 /product/neck-gaiter-sale https://www.badassoutdoorgear.com/first-lite-neck-gaiter.html
+redirect 301 /brand/Easton%20Outfitters https://www.badassoutdoorgear.com/products/product-brands.html/
+redirect 301 /product/obsession-defcon-m6 https://www.badassoutdoorgear.com/obsession-defcon-m7.html
+redirect 301 /products/backpacks/bino-cases https://www.badassoutdoorgear.com/backpacks/bino-optics-cases.html
+redirect 301 /product/rambo-customization-decal-kit https://www.badassoutdoorgear.com/rambo-customization-decal-kit.html
+redirect 301 /product/core4-merino-bottoms-11 https://www.badassoutdoorgear.com/core4-merino-bottoms-11.html
+redirect 301 /product/bear-prowess-womens-bow https://www.badassoutdoorgear.com/bear-prowess-rth-package.html
+redirect 301 /products/electric-bikes/camo-bikes https://www.badassoutdoorgear.com/r750c-camo-electric-bike.html
+redirect 301 /product/first-lite-neck-gaiter https://www.badassoutdoorgear.com/first-lite-neck-gaiter.html
+redirect 301 /products?keyword=window%20decals https://www.badassoutdoorgear.com/hunting-gear-products/lifestyle-travel/window-decals.html
+redirect 301 /product/r750c-camo-electric-bike https://www.badassoutdoorgear.com/r750c-camo-electric-bike.html
+redirect 301 /products?cid=90&clev=2 https://www.badassoutdoorgear.com/backpacks/hunting-packs/multi-day.html
+redirect 301 /product/bear-marshal-compound-bow https://www.badassoutdoorgear.com/bear-marshal-compound-bow.html
+redirect 301 /product/ladies-kali-day-pack https://www.badassoutdoorgear.com/ladies-kali-day-pack.html
+redirect 301 /buy/shop/discount/popular/J https://www.badassoutdoorgear.com/best-sellers.html/
+redirect 301 /buy/shop/discount/popular/W https://www.badassoutdoorgear.com/best-sellers.html/
+redirect 301 /buy/shop/discount/kali-ap https://www.badassoutdoorgear.com/ladies-kali-day-pack.html
+redirect 301 /products/backpacks/rangefinder-other-cases https://www.badassoutdoorgear.com/optics-for-hunting/rangefinders-for-hunting.html
+redirect 301 /product/tag-cuff-merino-beanie https://www.badassoutdoorgear.com/tag-cuff-merino-beanie.html
+redirect 301 /products/backpacks/h20-bladders-filters https://www.badassoutdoorgear.com/backpacks/h20-bladders-filters.html
+redirect 301 /products/archery/bow-package-deals https://www.badassoutdoorgear.com/archery-products/bow-package-deals.html
+redirect 301 /products/clothing/bad-ass-apparel https://www.badassoutdoorgear.com/clothing-for-hunters.html
+redirect 301 /product/first-lite-chama-hoody11 https://www.badassoutdoorgear.com/first-lite-chama-hoody11.html
+redirect 301 /products/optics-accessories/rifle-scopes https://www.badassoutdoorgear.com/optics-for-hunting/rifle-scopes-for-hunting.html
+redirect 301 /product/beer-hunter-t-shirt https://www.badassoutdoorgear.com/beer-hunter-t-shirt.html
+redirect 301 /product/first-lite-brimmed-beanie https://www.badassoutdoorgear.com/first-lite-brimmed-beanie.html
+redirect 301 /buy/shop/discount/popular/R https://www.badassoutdoorgear.com/best-sellers.html/
+redirect 301 /products/womens-gear/womens-backpacks https://www.badassoutdoorgear.com/women-hunting-gear/backpacks.html
+redirect 301 /product/tundra-cold-weather-balaclava https://www.badassoutdoorgear.com/tundra-cold-weather-balaclava.html
+redirect 301 /product/bear-legend-series-ls6- https://www.badassoutdoorgear.com/bear-legend-series-ls6.html
+redirect 301 /product/badlands-tactical-rap18-pack https://www.badassoutdoorgear.com/badlands-tactical-rap18-pack.html
+redirect 301 /products?cid=81&clev=2 https://www.badassoutdoorgear.com/hunting-gear-products.html
+redirect 301 /product/easton-compact-al5-medium https://www.badassoutdoorgear.com/women-hunting-gear/backpacks.html
+redirect 301 /products/optics-accessories/spotting-scopes https://www.badassoutdoorgear.com/optics-for-hunting/spotting-scopes-for-hunting.html
+redirect 301 /products/archery/ladies-compound-bows https://www.badassoutdoorgear.com/archery-products/ladies-compound-bows.html
+redirect 301 /buy/shop/discount/popular/V https://www.badassoutdoorgear.com/best-sellers.html/
+redirect 301 /product/badlands-tactical-hdx-pack https://www.badassoutdoorgear.com/badlands-tactical-hdx-pack.html
+redirect 301 /product/sanctuary-insulated-bib-pant https://www.badassoutdoorgear.com/sanctuary-insulated-bib-pant.html
+redirect 301 /products/optics-accessories/leica-optics https://www.badassoutdoorgear.com/optics-for-hunting/optics-adapters-accessories-for-hunting.html
+redirect 301 /buy/shop/discount/popular/P https://www.badassoutdoorgear.com/best-sellers.html/
+redirect 301 /product/womens-alturas-guide-pant https://www.badassoutdoorgear.com/womens-alturas-guide-pant.html
+redirect 301 /products/optics-accessories/optics-adapters https://www.badassoutdoorgear.com/optics-for-hunting/optics-adapters-accessories-for-hunting.html
+redirect 301 /product/fhf-gear-bino-case https://www.badassoutdoorgear.com/fhf-gear-bino-case.html
+redirect 301 /products?keyword=badlands%20apparel https://www.badassoutdoorgear.com/clothing-for-hunters/casual-apparel.html
+redirect 301 /product/tribe-one-pack-net https://www.badassoutdoorgear.com/tribe-one-pack-net.html
+redirect 301 /products/clothing/core4element/outer-layers https://www.badassoutdoorgear.com/clothing-for-hunters.html
+redirect 301 /product/badlands-tactical-bos-pack https://www.badassoutdoorgear.com/badlands-tactical-bos-pack.html
+redirect 301 /products/gear/easton-trekking-poles https://www.badassoutdoorgear.com/hunting-gear-products.html
+redirect 301 /product/g5-t3-expandable-broadhead https://www.badassoutdoorgear.com/g5-t3-expandable-broadhead.html
+redirect 301 /products/clothing/cold-weather-gear https://www.badassoutdoorgear.com/clothing-for-hunters/cold-weather.html
+redirect 301 /product/outdoor-edge-swingblaze-pak https://www.badassoutdoorgear.com/outdoor-edge-swingblaze-pak.html
+redirect 301 /products/gift-ideas/window-decals https://www.badassoutdoorgear.com/gift-ideas-under-60.html
+redirect 301 /product/field-bag-600-max1 https://www.badassoutdoorgear.com/field-bag-600-max1.html
+redirect 301 /products/gift-ideas/gift-cards https://www.badassoutdoorgear.com/gift-ideas-under-60.html
+redirect 301 /product/iscope-hardware-rebuild-kit https://www.badassoutdoorgear.com/iscope-hardware-rebuild-kit.html
+redirect 301 /buy/shop/discount/popular/O https://www.badassoutdoorgear.com/best-sellers.html/
+redirect 301 /products/clothing/casual-apparel/hats https://www.badassoutdoorgear.com/clothing-for-hunters/casual-apparel/hats.html
+redirect 301 /product/badlands-reactor-day-pack https://www.badassoutdoorgear.com/badlands-reactor-day-pack.html
+redirect 301 /product/badlands-point-day-pack https://www.badassoutdoorgear.com/badlands-point-day-pack.html
+redirect 301 /product/jeff-foxworthy-signature-iscope https://www.badassoutdoorgear.com/jeff-foxworthy-signature-iscope.html
+redirect 301 /product/geigerrig-pressurized-h20-bladder https://www.badassoutdoorgear.com/geigerrig-pressurized-h20-bladder.html
+redirect 301 /product/vapor-stormlight-ultralight-rain-jacket https://www.badassoutdoorgear.com/vapor-stormlight-ultralight-rain-jacket.html
+redirect 301 /product/rambo-extra-large-luggage-rack https://www.badassoutdoorgear.com/rambo-extra-large-luggage-rack.html
+redirect 301 /products/backpacks/easton-packs/easton-accessories https://www.badassoutdoorgear.com/backpacks/solid-color-packs.html
+redirect 301 /products/camo-patterns-color/mossy-oak https://www.badassoutdoorgear.com/women-hunting-gear/camo-hunting-apparel.html
+redirect 301 /product/first-lite-uncompahgre-puffy-jacket https://www.badassoutdoorgear.com/first-lite-uncompahgre-puffy-jacket.html
+redirect 301 /products/camo-patterns-color/realtree-xtra https://www.badassoutdoorgear.com/women-hunting-gear/camo-hunting-apparel.html
+redirect 301 /products/gear/wildgame-innovations-trail-cameras https://www.badassoutdoorgear.com/hunting-gear-products.html
+redirect 301 /product/problem-solved-funny-t-shirt https://www.badassoutdoorgear.com/problem-solved-funny-t-shirt.html
+redirect 301 /products/gift-ideas/youth-camo-gifts https://www.badassoutdoorgear.com/gift-ideas-under-60.html
+redirect 301 /products/camo-patterns-color/fusion-camo https://www.badassoutdoorgear.com/women-hunting-gear/camo-hunting-apparel.html
+redirect 301 /products/womens-gear/prois-hunting-apparel https://www.badassoutdoorgear.com/women-hunting-gear.html
+redirect 301 /product/quest-amp-bow-dth-package https://www.badassoutdoorgear.com/quest-amp-bow-dth-package.html
+redirect 301 /products/clothing/casual-apparel/t-shirts https://www.badassoutdoorgear.com/clothing-for-hunters/casual-apparel/t-shirts.html
+redirect 301 /product/easton-outfitters-rain-cover-1200 https://www.badassoutdoorgear.com/easton-outfitters-rain-cover-1200.html
+redirect 301 /products/camo-patterns-color/asat-camo https://www.badassoutdoorgear.com/women-hunting-gear/camo-hunting-apparel.html
+redirect 301 /products/womens-gear/ladies-hunting-accessories https://www.badassoutdoorgear.com/women-hunting-gear/hunting-accessories.html
+redirect 301 /products/optics-accessories/fhf-gear/hunting https://www.badassoutdoorgear.com/optics-for-hunting/optics-adapters-accessories-for-hunting.html
+redirect 301 /products/clothing/accessories/neck-gaiters-balaclavas https://www.badassoutdoorgear.com/clothing-for-hunters/clothing-accessories/beanies-balaclavas-neck-gaiters.html
+redirect 301 /products/optics-accessories/styrka-optics/riflescopes https://www.badassoutdoorgear.com/optics-for-hunting/rifle-scopes-for-hunting.html
+redirect 301 /product/quest-radical-bow-dth-packages https://www.badassoutdoorgear.com/quest-radical-bow-dth-packages.html
+redirect 301 /product/prois-ladies-beanie-sherpa-fleece https://www.badassoutdoorgear.com/prois-ladies-beanie-sherpa-fleece.html
+redirect 301 /products/backpacks/hunting-packs/day-packs https://www.badassoutdoorgear.com/backpacks/hunting-packs/day-packs.html
+redirect 301 /products/womens-gear/casual-apparel-hats https://www.badassoutdoorgear.com/women-hunting-gear/casual-apparel.html
+redirect 301 /products/gift-ideas/for-the-ladies https://www.badassoutdoorgear.com/gift-ideas-under-60.html
+redirect 301 /products/camo-patterns-color/approach-camo https://www.badassoutdoorgear.com/women-hunting-gear/camo-hunting-apparel.html
+redirect 301 /product/badlands-water-bottle-hunting-accessory https://www.badassoutdoorgear.com/badlands-water-bottle-hunting-accessory.html
+redirect 301 /product/wildgame-innovations-crush-cam-8 https://www.badassoutdoorgear.com/wildgame-innovations-crush-cam-8.html
+redirect 301 /category/clothing/first-lite-merino-wool https://www.badassoutdoorgear.com/clothing-for-hunters/merino-wool-layers.html
+redirect 301 /products/gear/solar-power-power-packs https://www.badassoutdoorgear.com/hunting-gear-products.html
+redirect 301 /products/clothing/hats-beanies-gloves-accessories https://www.badassoutdoorgear.com/clothing-for-hunters/casual-apparel/hats.html
+redirect 301 /product/core4-mid-mountain-vest-11 https://www.badassoutdoorgear.com/core4-mid-mountain-vest-11.html
+redirect 301 /product/c4-mini-universal-optic-adapter-clearance https://www.badassoutdoorgear.com/c4-mini-universal-optic-adapter-clearance.html
+redirect 301 /product/outdoor-edge-flip-n-blaze-sawcombo https://www.badassoutdoorgear.com/outdoor-edge-flip-n-blaze-sawcombo.html
+redirect 301 /product/first-lite-kanab-2-merino-pant https://www.badassoutdoorgear.com/first-lite-kanab-2-merino-pant.html
+
+#301 Redirection - 4 April 2017
+redirect 301 /product/phone-skope-c2-universal-phone-attachment https://www.badassoutdoorgear.com/phone-skope-c2-universal-phone-attachment.html
+redirect 301 /product/badlands-ox-pack-frame-frame-only https://www.badassoutdoorgear.com/backpacks/tactical-packs.html
+redirect 301 /product/first-lite-chama-exp-14-zip https://www.badassoutdoorgear.com/first-lite-chama-exp-14-zip.html
+redirect 301 /products/camo-patterns-color/realtree-max-1 https://www.badassoutdoorgear.com/first-lite-llano-14-zip.html
+redirect 301 /products/clothing/casual-apparel/fun-t-shirts https://www.badassoutdoorgear.com/clothing-for-hunters/casual-apparel/funny-t-shirts.html
+redirect 301 /product/stormkloth-ii-youuth-camo-hunting-pants https://www.badassoutdoorgear.com/stormkloth-ii-youuth-camo-hunting-pants.html
+redirect 301 /product/first-lite-red-desert-boxer-short https://www.badassoutdoorgear.com/first-lite-red-desert-boxer-short.html
+redirect 301 /products/clothing/first-lite-merino-wool/accessories https://www.badassoutdoorgear.com/clothing-for-hunters/merino-wool-layers/accessories.html
+redirect 301 /products/clothing/first-lite-merino-wool/bottoms https://www.badassoutdoorgear.com/clothing-for-hunters/merino-wool-layers/bottoms.html
+redirect 301 /products/gift-ideas/funny-t-shirts-gifts https://www.badassoutdoorgear.com/gift-ideas-under-60.html
+redirect 301 /product/leica-crf-rangemaster-1000-r-1 https://www.badassoutdoorgear.com/leica-crf-rangemaster-1000-r-1.html
+redirect 301 /product/seak-stormtight-heavy-duty-rain-jacket https://www.badassoutdoorgear.com/seak-stormtight-heavy-duty-rain-jacket.html
+redirect 301 /products/backpacks/hunting-packs/meat-hauling-packs https://www.badassoutdoorgear.com/backpacks/hunting-packs/meat-hauling.html
+redirect 301 /products/sale/clothing/first-lite-merino-wool https://www.badassoutdoorgear.com/clothing-for-hunters/merino-wool-layers.html
+redirect 301 /products/clothing/first-lite-merino-wool/tops https://www.badassoutdoorgear.com/clothing-for-hunters/merino-wool-layers/tops.html
+redirect 301 /product/legal-addiction-fly-fishing-window-decal https://www.badassoutdoorgear.com/legal-addiction-fly-fishing-window-decal.html
+redirect 301 /product/bad-ass-outdoor-gear-performance-hoodies https://www.badassoutdoorgear.com/bad-ass-outdoor-gear-performance-hoodies.html
+redirect 301 /product/bad-ass-outdoor-gear-logo-t-shirts https://www.badassoutdoorgear.com/bad-ass-outdoor-gear-logo-t-shirts.html
+redirect 301 /products/womens-gear/rivers-west-waterproof-hunting-apparel https://www.badassoutdoorgear.com/women-hunting-gear.html
+redirect 301 /product/deadeye-outfitters-loud-mouth-duck-call-america https://www.badassoutdoorgear.com/deadeye-outfitters-loud-mouth-duck-call-america.html
+redirect 301 /product/stormkloth-ii-womens-performance-original-hunting-jacket https://www.badassoutdoorgear.com/stormkloth-ii-womens-performance-original-hunting-jacket.html
+redirect 301 /product/wilson-electronics-cell-phone-signal-booster-wireless-4g https://www.badassoutdoorgear.com/wilson-electronics-cell-phone-signal-booster-wireless-4g.html
+redirect 301 /product/eat-tuna-the-other-pink-meat-funny-t-shirt https://www.badassoutdoorgear.com/eat-tuna-the-other-pink-meat-funny-t-shirt.html
+redirect 301 /product/eat-salmon-the-other-pink-meat-funny-t-shirt https://www.badassoutdoorgear.com/eat-salmon-the-other-pink-meat-funny-t-shirt.html
+redirect 301 /product/leica-geovid-hd-b-laser-rangefinder-1042-binoculars-with-ballistics-code-u1 https://www.badassoutdoorgear.com/leica-geovid-hd-b-laser-rangefinder-1042-binoculars-with-ballistics-code-u1.html
+redirect 301 /brand/bad+ass+outdoor+gear https://www.badassoutdoorgear.com/products/product-brands.html/
+redirect 301 /brand/styrka+optics https://www.badassoutdoorgear.com/products/product-brands.html/
+redirect 301 /category/clothing/rivers-west-waterproof-camo https://www.badassoutdoorgear.com/clothing-for-hunters/waterproof.html
+redirect 301 /buy/shop/discount/popular/w https://www.badassoutdoorgear.com/best-sellers.html/
+redirect 301 /brand/Obsession-bows https://www.badassoutdoorgear.com/products/product-brands.html/
+redirect 301 /brand/g5+outdoors https://www.badassoutdoorgear.com/products/product-brands.html/
+redirect 301 /brand/Quest https://www.badassoutdoorgear.com/products/product-brands.html/
+redirect 301 /brand/fhf+gear https://www.badassoutdoorgear.com/products/product-brands.html/
+redirect 301 /category/optics-accessories/styrka-optics https://www.badassoutdoorgear.com/optics-for-hunting/optics-adapters-accessories-for-hunting.html
+redirect 301 /category/rivers-west-waterproof-camo https://www.badassoutdoorgear.com/clothing-for-hunters/waterproof.html
+redirect 301 /products/backpacks/hunting-packs/multi-day https://www.badassoutdoorgear.com/backpacks/hunting-packs/multi-day.html
+redirect 301 /brand/rivers+west https://www.badassoutdoorgear.com/products/product-brands.html/
+redirect 301 /brand/stormkloth+ii https://www.badassoutdoorgear.com/products/product-brands.html/
+redirect 301 /category/gear/optics-gear https://www.badassoutdoorgear.com/optics-for-hunting.html
+redirect 301 /brand/mudriver https://www.badassoutdoorgear.com/products/product-brands.html/
+redirect 301 /product-category/clothing/t-shirts/ https://www.badassoutdoorgear.com/clothing-for-hunters/casual-apparel/t-shirts.html
+redirect 301 /buy/shop/discount/badlands https://www.badassoutdoorgear.com/promotions/coupon-codes.html/
+redirect 301 /fan-giveaway/ https://www.badassoutdoorgear.com/badlands-ladies-kali-fanny-pack.html
+redirect 301 /product-category/clothing/klymit-insulated-vests/ https://www.badassoutdoorgear.com/clothing-for-hunters/vests.html
+redirect 301 /product-category/gear/archery/ https://www.badassoutdoorgear.com/archery-products.html
+redirect 301 /category/gear/dog-gear https://www.badassoutdoorgear.com/hunting-gear-products.html
+redirect 301 /product-category/gear/optics-gear/ https://www.badassoutdoorgear.com/optics-for-hunting.html
+redirect 301 /product-category/gift-ideas/for-pet-lovers/ https://www.badassoutdoorgear.com/gift-ideas-under-60.html
+redirect 301 /shop/terms/ https://www.badassoutdoorgear.com/support/terms-of-use.html/
+redirect 301 /product-category/gear/h20-bladders-gear/ https://www.badassoutdoorgear.com/backpacks/h20-bladders-filters.html
+redirect 301 /products/gift-ideas/for-the-ladies/womens-gear https://www.badassoutdoorgear.com/gift-ideas-under-60.html
+redirect 301 /product-category/clothing/youth-stormkloth-ii-camo/ https://www.badassoutdoorgear.com/clothing-for-hunters/youth.html
+redirect 301 /product-category/gear/dog-gear/ https://www.badassoutdoorgear.com/hunting-gear-products.html
+redirect 301 /buy/shop/discount/popular/s https://www.badassoutdoorgear.com/best-sellers.html/
+redirect 301 /brand/wildgame+innovations https://www.badassoutdoorgear.com/products/product-brands.html/
+redirect 301 /pa_c-2-kit/custom-bond-plastic-adhesive-included/ https://www.badassoutdoorgear.com/
+redirect 301 /product/be-the-decoy-blacktail-betty11 https://www.badassoutdoorgear.com/be-the-decoy-blacktail-betty11.html
+redirect 301 /product/rambo-camo-accessory-bag https://www.badassoutdoorgear.com/rambo-camo-accessory-bag.html
+redirect 301 /product/north-branch-softshell-pants https://www.badassoutdoorgear.com/north-branch-softshell-pants.html
+redirect 301 /product/phone-skope-custom-optic-adapters https://www.badassoutdoorgear.com/phone-skope-custom-optic-adapters.html
+redirect 301 /product/core4-summit-jacket https://www.badassoutdoorgear.com/core4-summit-jacket.html
+redirect 301 /product/victory-laser-rangefinder- https://www.badassoutdoorgear.com/victory-laser-rangefinder.html
+redirect 301 /products/gear/lifestyle-travel https://www.badassoutdoorgear.com/rambo-gunbow-holder.html
+redirect 301 /product/first-lite-womens-lupine-crew https://www.badassoutdoorgear.com/first-lite-womens-lupine-crew.html
+redirect 301 /product/legal-addiction-bull-elk-window-decal https://www.badassoutdoorgear.com/legal-addiction-bull-elk-window-decal.html
+redirect 301 /product/nylon-field-belt https://www.badassoutdoorgear.com/nylon-field-belt.html
+redirect 301 /buy/shop/discount/popular/F https://www.badassoutdoorgear.com/best-sellers.html/
+redirect 301 /products/backpacks/fhf-gear https://www.badassoutdoorgear.com/backpacks.html
+redirect 301 /products/gear/shooting-sticks https://www.badassoutdoorgear.com/hunting-gear-products.html
+redirect 301 /buy/shop/discount/popular/D https://www.badassoutdoorgear.com/best-sellers.html/
+redirect 301 /product/c4-torrent-rain-jacket https://www.badassoutdoorgear.com/c4-torrent-rain-jacket.html
+redirect 301 /product/womens-salomon-speedcross-3-cs-trail-running-shoes https://www.badassoutdoorgear.com/womens-salomon-speedcross-3-cs-trail-running-shoes.html
+redirect 301 /product/stormkloth-ii-womens-performance-fleece-hunting-vest11 https://www.badassoutdoorgear.com/stormkloth-ii-performance-fleece-hunting-jacket11.html
+redirect 301 /product/salomon-speedcross-4-gtx https://www.badassoutdoorgear.com/salomon-speedcross-4-gtx.html
+redirect 301 /brand/salomon https://www.badassoutdoorgear.com/products/product-brands.html/
+redirect 301 /product/algus-pant-approach https://www.badassoutdoorgear.com/algus-pant-approach.html
+redirect 301 /products/clothing/core4element/jackets-pants https://www.badassoutdoorgear.com/clothing-for-hunters/jackets.html
+redirect 301 /product/ovis-14-zip-crew https://www.badassoutdoorgear.com/ovis-14-zip-crew.html
+redirect 301 /category/backpacks/badlands-packs https://www.badassoutdoorgear.com/backpacks.html
+redirect 301 /brand/g5 https://www.badassoutdoorgear.com/products/product-brands.html/
+redirect 301 /product/prois-neck-gaiter-sherpa-fleece https://www.badassoutdoorgear.com/prois-neck-gaiter-sherpa-fleece.html
+redirect 301 /product/wilkin-half-zip-aerowool-jacket https://www.badassoutdoorgear.com/wilkin-half-zip-aerowool-jacket.html
+redirect 301 /product/deadeye-outfitters-incoming-elk-t-shirt11 https://www.badassoutdoorgear.com/deadeye-outfitters-incoming-elk-t-shirt11.html
+redirect 301 /product/eberlestock-nosegunner-bino-case https://www.badassoutdoorgear.com/eberlestock-nosegunner-bino-case.html
+redirect 301 /product/ladies-muley-skull-tee https://www.badassoutdoorgear.com/ladies-muley-skull-tee.html
+redirect 301 /product/master-baiter-funny-t-shirt https://www.badassoutdoorgear.com/master-baiter-funny-t-shirt.html
+redirect 301 /category/clothing/t-shirts https://www.badassoutdoorgear.com/clothing-for-hunters/casual-apparel/t-shirts.html
+redirect 301 /buy/shop/discount/popular/E https://www.badassoutdoorgear.com/best-sellers.html/
+redirect 301 /brand/rivers-west https://www.badassoutdoorgear.com/products/product-brands.html/
+redirect 301 /product/arctic-fox-parka https://www.badassoutdoorgear.com/arctic-fox-parka.html
+redirect 301 /product/badlands-tree-stand-day-pack https://www.badassoutdoorgear.com/badlands-tree-stand-day-pack.html
+redirect 301 /buy/shop/discount/popular/K https://www.badassoutdoorgear.com/best-sellers.html/
+redirect 301 /product/eberlestock-transformer https://www.badassoutdoorgear.com/eberlestock-h20-bladder.html
+redirect 301 /product/styrka-optics-s7-series-20-60-x-80-spotting-scope https://www.badassoutdoorgear.com/styrka-optics-s7-series-20-60-x-80-spotting-scope.html
+redirect 301 /pa_pant-size/36/ https://www.badassoutdoorgear.com/
+redirect 301 /product/rambo-fenders https://www.badassoutdoorgear.com/rambo-fenders.html
+redirect 301 /product/ovis-legging https://www.badassoutdoorgear.com/ovis-legging.html
+redirect 301 /products/clothing/accessories/socks-boot-gaiters https://www.badassoutdoorgear.com/clothing-for-hunters/clothing-accessories/socks-boot-gaiters.html
+redirect 301 /product/stormkloth-ii-youth-camo-hunting-jacket https://www.badassoutdoorgear.com/stormkloth-ii-youth-camo-hunting-jacket.html
+redirect 301 /product/ballistic-rangefinder-pouch https://www.badassoutdoorgear.com/ballistic-rangefinder-pouch.html
+redirect 301 /product/rambo-r750-black-power-bike https://www.badassoutdoorgear.com/rambo-r750-black-power-bike.html
+redirect 301 /product/le-duck https://www.badassoutdoorgear.com/le-duck.html
+redirect 301 /product/rambo-extra-battery-pack https://www.badassoutdoorgear.com/rambo-extra-battery-pack.html
+redirect 301 /product/core4-switchback-pant-sale https://www.badassoutdoorgear.com/core4-switchback-pant-sale.html
+redirect 301 /products/clothing/youth-camo https://www.badassoutdoorgear.com/clothing-for-hunters/youth.html
+redirect 301 /giveaways-2/ https://www.badassoutdoorgear.com/
+
+#301 Redirection on 6 April 2017
+
+redirect 301 /product/short-haul-duffle-bag https://www.badassoutdoorgear.com/short-haul-duffle-bag.html
+redirect 301 /brand/eberlestock https://www.badassoutdoorgear.com/products/product-brands.html/
+redirect 301 /product/leica-crf-rangemaster-1600-b-1 https://www.badassoutdoorgear.com/leica-crf-rangemaster-1600-b-1.html
+redirect 301 /product/stormkloth-ii-performance-fleece-beanie11 https://www.badassoutdoorgear.com/stormkloth-ii-performance-fleece-beanie11.html
+redirect 301 /product/grizzly-cold-weather-glove https://www.badassoutdoorgear.com/grizzly-cold-weather-glove.html
+redirect 301 /product/stormkloth-ii-performance-fleece-hunting-pants11 https://www.badassoutdoorgear.com/stormkloth-ii-performance-fleece-hunting-jacket11.html
+redirect 301 /product/ovis-legging https://www.badassoutdoorgear.com/ovis-legging.html
+redirect 301 /product/core4-elevation-vest-11 https://www.badassoutdoorgear.com/core4-elevation-vest-11.html
+redirect 301 /product/outdoor-edge-razor-lite-replacement-blade-knife https://www.badassoutdoorgear.com/outdoor-edge-razor-lite-replacement-blade-knife.html
+redirect 301 /product/nylon-field-belt https://www.badassoutdoorgear.com/nylon-field-belt.html
+redirect 301 /product/guide-2000 https://www.badassoutdoorgear.com/guide-2000.html
+redirect 301 /product/c4-element-pant https://www.badassoutdoorgear.com/c4-element-pant.html
+redirect 301 /product/bad-ass-outdoor-gear-flexfit-hat https://www.badassoutdoorgear.com/bad-ass-outdoor-gear-flexfit-hat.html
+redirect 301 /product/merino-2590-beanie-sale https://www.badassoutdoorgear.com/merino-2590-beanie-sale.html
+redirect 301 /product/merino-2590-zip11 https://www.badassoutdoorgear.com/merino-2590-zip11.html
+redirect 301 /product/leica-ultravid-hd-1042-binoculars-sale https://www.badassoutdoorgear.com/leica-ultravid-hd-1042-binoculars-sale.html
+redirect 301 /product/be-the-decoy-blacktail-betty11 https://www.badassoutdoorgear.com/be-the-decoy-blacktail-betty11.html
+redirect 301 /product/salomon-speedcross-4-gtx https://www.badassoutdoorgear.com/salomon-speedcross-4-gtx.html
+redirect 301 /product/badlands-tactical-everything-pocket https://www.badassoutdoorgear.com/badlands-tactical-everything-pocket.html
+redirect 301 /product/badlands-monster-fanny-pack https://www.badassoutdoorgear.com/badlands-monster-fanny-pack.html
+redirect 301 /product/uncompahgre-puffy-vest https://www.badassoutdoorgear.com/uncompahgre-puffy-vest.html
+redirect 301 /product/womens-artemis-hoody- https://www.badassoutdoorgear.com/womens-artemis-hoody.html
+redirect 301 /product/talus-fixed-frame-6800-last-one-max1 https://www.badassoutdoorgear.com/talus-fixed-frame-6800-last-one-max1.html
+redirect 301 /product/mainframe https://www.badassoutdoorgear.com/mainframe.html
+redirect 301 /product/game-trail-xt-800-max1 https://www.badassoutdoorgear.com/game-trail-xt-800-max1.html
+redirect 301 /product/geigerrig-power-bulb-holder https://www.badassoutdoorgear.com/geigerrig-power-bulb-holder.html
+redirect 301 /brand/phone+skope https://www.badassoutdoorgear.com/products/product-brands.html/
+redirect 301 /product/stormkloth-ii-womens-performance-original-hunting-jacket https://www.badassoutdoorgear.com/stormkloth-ii-womens-performance-original-hunting-jacket.html
+redirect 301 /product/core4-boot-gaiters11 https://www.badassoutdoorgear.com/core4-merino-bottoms-11.html
+redirect 301 /product/first-lite-halstead-tech-fleece11 https://www.badassoutdoorgear.com/first-lite-halstead-tech-fleece11.html
+redirect 301 /product/hydro-scout-1500 https://www.badassoutdoorgear.com/hydro-scout-1500.html
+redirect 301 /product/first-lite-boundary-stormtight-pant11 https://www.badassoutdoorgear.com/first-lite-boundary-stormtight-pant11.html
+redirect 301 /products/gear/shoes-boots https://www.badassoutdoorgear.com/clothing-for-hunters/footwear.html
+redirect 301 /product/legal-addiction-bull-elk-window-decal https://www.badassoutdoorgear.com/legal-addiction-bull-elk-window-decal.html
+redirect 301 /product/misty-pak-jak https://www.badassoutdoorgear.com/misty-pak-jak.html
+redirect 301 /products/clothing/stormkloth-ii-camo https://www.badassoutdoorgear.com/clothing-for-hunters/youth.html
+redirect 301 /product/pioneer-junior-pant https://www.badassoutdoorgear.com/pioneer-junior-pant.html
+redirect 301 /brand/zeiss-optics https://www.badassoutdoorgear.com/products/product-brands.html/
+redirect 301 /product/stormkloth-ii-womens-performance-original-hunting-pant https://www.badassoutdoorgear.com/stormkloth-ii-womens-performance-original-hunting-pant.html
+redirect 301 /brand/G5 https://www.badassoutdoorgear.com/products/product-brands.html/
+redirect 301 /product/first-lite-llano-14-zip https://www.badassoutdoorgear.com/first-lite-llano-14-zip.html
+redirect 301 /brand/scottarchery https://www.badassoutdoorgear.com/products/product-brands.html/
+redirect 301 /products/clothing/first-lite-merino-wool https://www.badassoutdoorgear.com/clothing-for-hunters/merino-wool-layers.html
+redirect 301 /product/s9-series-10-x-42-binoculars https://www.badassoutdoorgear.com/s9-series-10-x-42-binoculars.html
+redirect 301 /product/allegheny-bottoms https://www.badassoutdoorgear.com/allegheny-bottoms.html
+redirect 301 /product/tactical-bino-case- https://www.badassoutdoorgear.com/tactical-bino-case.html
+redirect 301 /product/glenbrook-34-length-aerowool-bottoms https://www.badassoutdoorgear.com/glenbrook-34-length-aerowool-bottoms.html
+redirect 301 /product/badlands-ultra-day https://www.badassoutdoorgear.com/badlands-ultra-day.html
+redirect 301 /product/tailgate-duffel-large-2700 https://www.badassoutdoorgear.com/tailgate-duffel-large-2700.html
+redirect 301 /product/womens-salomon-speedtrack-shoe https://www.badassoutdoorgear.com/womens-salomon-speedtrack-shoe.html
+redirect 301 /product/s7-series-15-45-x-65-spotting-scope https://www.badassoutdoorgear.com/s7-series-15-45-x-65-spotting-scope.html
+redirect 301 /product/easton-outfitters-day-tripper-1700 https://www.badassoutdoorgear.com/easton-outfitters-day-tripper-1700.html
+redirect 301 /product/wildgame-innovations-razor-6-trail-camera https://www.badassoutdoorgear.com/wildgame-innovations-razor-6-trail-camera.html
+redirect 301 /product/stormkloth-ii-performance-original-vest-max1 https://www.badassoutdoorgear.com/stormkloth-ii-performance-original-vest-max1.html
+redirect 301 /product/first-lite-chama-14-zip https://www.badassoutdoorgear.com/first-lite-chama-14-zip.html
+redirect 301 /product/razor-lite-edc https://www.badassoutdoorgear.com/razor-lite-edc.html
+redirect 301 /product/team-elk-pack-free-h20-bladder https://www.badassoutdoorgear.com/team-elk-pack-free-h20-bladder.html
+redirect 301 /product/s7-series-25-15-x-50-mil-dot-riflescope https://www.badassoutdoorgear.com/s7-series-25-15-x-50-mil-dot-riflescope.html
+redirect 301 /product/s5-series-10-x-42-binocular https://www.badassoutdoorgear.com/s5-series-10-x-42-binocular.html
+redirect 301 /product/s5-series-45-14-x-44-sh-bdc-riflescope https://www.badassoutdoorgear.com/s5-series-45-14-x-44-sh-bdc-riflescope.html
+redirect 301 /product/water-proofing-spray https://www.badassoutdoorgear.com/water-proofing-spray.html
+redirect 301 /brand/geigerrig https://www.badassoutdoorgear.com/products/product-brands.html/
+redirect 301 /brand/iscope https://www.badassoutdoorgear.com/products/product-brands.html/
+redirect 301 /brand/Salomon https://www.badassoutdoorgear.com/products/product-brands.html/
+redirect 301 /articles/reward-program https://www.badassoutdoorgear.com/rewards/account/
+redirect 301 /product/badlands-magnetic-bino-case https://www.badassoutdoorgear.com/badlands-magnetic-bino-case.html
+redirect 301 /product/s9-series-15-x-56-binocular https://www.badassoutdoorgear.com/s9-series-15-x-56-binocular.html
+redirect 301 /product/rifle-boot https://www.badassoutdoorgear.com/rifle-boot.html
+redirect 301 /product/horn-dog-cookware-guy-gal-set https://www.badassoutdoorgear.com/horn-dog-cookware-guy-gal-set.html
+redirect 301 /product/black-wool-blend-hat https://www.badassoutdoorgear.com/black-wool-blend-hat.html
+redirect 301 /product/be-the-decoy-wapiti-assassin-elk11 https://www.badassoutdoorgear.com/be-the-decoy-wapiti-assassin-elk11.html
+redirect 301 /product/x2-day-pack https://www.badassoutdoorgear.com/x2-day-pack.html
+redirect 301 /product/woodbury-midseason-jacket https://www.badassoutdoorgear.com/woodbury-midseason-jacket.html
+redirect 301 /product/womens-syringa-short1 https://www.badassoutdoorgear.com/womens-syringa-short1.html
+redirect 301 /product/womens-salomon-fellraiser-shoe https://www.badassoutdoorgear.com/womens-salomon-fellraiser-shoe.html
+redirect 301 /product/womens-larkspur-bottoms https://www.badassoutdoorgear.com/womens-larkspur-bottoms.html
+redirect 301 /product/womens-guide-1800 https://www.badassoutdoorgear.com/womens-guide-1800.html
+redirect 301 /product/wildgame-innovations-rage-5/ https://www.badassoutdoorgear.com/hunting-gear-products/closeouts.html
+redirect 301 /product/trucker-hat https://www.badassoutdoorgear.com/trucker-hat.html
+redirect 301 /product/triad-mountain-athlete-sock11 https://www.badassoutdoorgear.com/triad-mountain-athlete-sock11.html
+redirect 301 /product/traverse-hunting-gaiters https://www.badassoutdoorgear.com/traverse-hunting-gaiters.html
+redirect 301 /product/transformer https://www.badassoutdoorgear.com/transformer.html
+redirect 301 /product/the-iscope/ https://www.badassoutdoorgear.com/jeff-foxworthy-signature-iscope.html
+redirect 301 /product/the-hinsch-xt-700 https://www.badassoutdoorgear.com/the-hinsch-xt-700.html
+redirect 301 /product/stormkloth-ii-womens-performance-outerwear/ https://www.badassoutdoorgear.com/stormkloth-ii-womens-performance-original-hunting-pant.html
+redirect 301 /product/stormkloth-ii-performance-original-hunting-jacket/ https://www.badassoutdoorgear.com/stormkloth-ii-womens-performance-original-hunting-jacket.html
+redirect 301 /product/stormkloth-ii-performance-fleece-hunting-jacket11 https://www.badassoutdoorgear.com/stormkloth-ii-performance-fleece-hunting-jacket11.html
+redirect 301 /product/stormkloth-ii-performance-fleece-hunting-jacket/ https://www.badassoutdoorgear.com/stormkloth-ii-womens-performance-fleece-hunting-jacket11.html
+redirect 301 /product/stormkloth-ii-fleece-leg-gaiters/ https://www.badassoutdoorgear.com/stormkloth-ii-performance-fleece-beanie11.html
+redirect 301 /product/stormkloth-ii-fleece-gloves11 https://www.badassoutdoorgear.com/stormkloth-ii-fleece-gloves11.html
+redirect 301 /product/stalker https://www.badassoutdoorgear.com/core4-stalker-beanie-sale.html
+redirect 301 /product/sexdaily-funny-t-shirt https://www.badassoutdoorgear.com/sexdaily-funny-t-shirt.html
+redirect 301 /product/selway-zip-shirt-max1 https://www.badassoutdoorgear.com/selway-zip-shirt-max1.html
+redirect 301 /product/seak-stormtight-heavy-duty-rain-jacket https://www.badassoutdoorgear.com/seak-stormtight-heavy-duty-rain-jacket.html
+redirect 301 /product/scree-tactical-glove https://www.badassoutdoorgear.com/scree-tactical-glove.html
+redirect 301 /product/salomon-speedcross-3-cs-trail-running-shoes https://www.badassoutdoorgear.com/womens-salomon-speedcross-3-cs-trail-running-shoes.html
+redirect 301 /product/s3-series-2-7-x-32-sh-bdc-riflescope https://www.badassoutdoorgear.com/s3-series-2-7-x-32-sh-bdc-riflescope.html
+redirect 301 /product/rino-gps-pouch https://www.badassoutdoorgear.com/rino-gps-pouch.html
+redirect 301 /product/rambo-headlight https://www.badassoutdoorgear.com/rambo-headlight.html
+redirect 301 /product/rambo-gunbow-holder https://www.badassoutdoorgear.com/rambo-gunbow-holder.html
+redirect 301 /product/rambo-extra-battery-pack https://www.badassoutdoorgear.com/rambo-extra-battery-pack.html
+redirect 301 /product/quest-forge-bowdth-package https://www.badassoutdoorgear.com/quest-forge-bowdth-package.html
+redirect 301 /product/prois-sherpa-jacket https://www.badassoutdoorgear.com/prois-sherpa-jacket.html
+redirect 301 /product/phone-skope-custom-phone-cases https://www.badassoutdoorgear.com/phone-skope-custom-phone-cases.html
+redirect 301 /product/phantom-leafy-3d-jacket https://www.badassoutdoorgear.com/phantom-leafy-3d-jacket.html
+redirect 301 /product/phantom-leafy-3d-balaclava https://www.badassoutdoorgear.com/phantom-leafy-3d-balaclava.html
+redirect 301 /product/outfitters-youth-whitetail-t-shirt https://www.badassoutdoorgear.com/outfitters-youth-whitetail-t-shirt.html
+redirect 301 /product/outdoor-edge-flip-n-zip-double-blade https://www.badassoutdoorgear.com/outdoor-edge-flip-n-zip-double-blade.html
+redirect 301 /product/obsession-k34 https://www.badassoutdoorgear.com/obsession-defcon-m7.html
+redirect 301 /product/montana-gps-pouch https://www.badassoutdoorgear.com/montana-gps-pouch.html
+redirect 301 /product/merino-wool-hoodie-max1 https://www.badassoutdoorgear.com/merino-wool-hoodie-max1.html
+redirect 301 /product/merino-wool-crew11 https://www.badassoutdoorgear.com/core4-merino-bottoms-11.html
+redirect 301 /product/merino-wool-boxer/ https://www.badassoutdoorgear.com/first-lite-red-desert-boxer-short.html
+redirect 301 /product/lynx-jacket https://www.badassoutdoorgear.com/lynx-jacket.html
+redirect 301 /product/long-haul-duffle-bag https://www.badassoutdoorgear.com/long-haul-duffle-bag.html
+redirect 301 /product/little-goose-release https://www.badassoutdoorgear.com/core4-elevation-vest-11.html
+redirect 301 /product/little-bitty-goose-release https://www.badassoutdoorgear.com/archery-products/releases.html
+redirect 301 /product/leica-ultravid-hd-plus-1042-binoculars https://www.badassoutdoorgear.com/leica-ultravid-hd-plus-1042-binoculars.html
+redirect 301 /product/leica-geovid-hd-b-laser-rangefinder-1042-binoculars-with-ballistics-code-u1 https://www.badassoutdoorgear.com/leica-geovid-hd-b-laser-rangefinder-1042-binoculars-with-ballistics-code-u1.html
+redirect 301 /product/legal-addiction-muley-window-decal https://www.badassoutdoorgear.com/legal-addiction-muley-window-decal.html
+redirect 301 /product/ladies-regular-fit-t-shirt https://www.badassoutdoorgear.com/ladies-regular-fit-t-shirt.html
+redirect 301 /product/ladies-pink-camo-trucker-logo-hat https://www.badassoutdoorgear.com/ladies-black-hat-with-pink-logo.html
+redirect 301 /product/ladies-muley-skull-tee https://www.badassoutdoorgear.com/ladies-muley-skull-tee.html
+redirect 301 /product/ladies-black-hat-with-pink-logo- https://www.badassoutdoorgear.com/ladies-black-hat-with-pink-logo.html
+redirect 301 /product/kinetic-fleece-vest https://www.badassoutdoorgear.com/kinetic-fleece-vest.html
+redirect 301 /product/jeff-foxworthy-signature-ispotter https://www.badassoutdoorgear.com/jeff-foxworthy-signature-ispotter.html
+redirect 301 /product/iscope-replacement-back-plates/ https://www.badassoutdoorgear.com/iscope-phone-back-plates.html
+redirect 301 /product/iphone-4-spotting-scope-kit/ https://www.badassoutdoorgear.com/phone-skope-custom-optic-adapters.html
+redirect 301 /product/horn-dog-cookware-man-holding-wiener-set https://www.badassoutdoorgear.com/horn-dog-cookware-man-holding-wiener-set.html
+redirect 301 /product/horn-dog-cookware-chicken-riding-man https://www.badassoutdoorgear.com/horn-dog-cookware-chicken-riding-man.html
+redirect 301 /product/high-uintas-vest https://www.badassoutdoorgear.com/high-uintas-vest.html
+redirect 301 /product/h20-bladder https://www.badassoutdoorgear.com/h20-bladder.html
+redirect 301 /product/gps-pouch https://www.badassoutdoorgear.com/gps-pouch.html
+redirect 301 /product/geigerrig-in-line-crypto-water-filter https://www.badassoutdoorgear.com/geigerrig-in-line-crypto-water-filter.html
+redirect 301 /product/g5-havoc-expandable-broadhead https://www.badassoutdoorgear.com/g5-havoc-expandable-broadhead.html
+redirect 301 /product/fullbore-xt-3600-max1 https://www.badassoutdoorgear.com/game-trail-xt-800-max1.html
+redirect 301 /product/fox-release https://www.badassoutdoorgear.com/arctic-fox-parka.html
+redirect 301 /product/flask https://www.badassoutdoorgear.com/flask.html
+redirect 301 /product/first-lite-womens-lupine-crew https://www.badassoutdoorgear.com/first-lite-womens-lupine-crew.html
+redirect 301 /product/first-lite-uncompahgre-puffy-jacket-2/ https://www.badassoutdoorgear.com/first-lite-uncompahgre-puffy-jacket.html
+redirect 301 /product/first-lite-sanctuary-jacket-aug-2014/ https://www.badassoutdoorgear.com/sanctuary-jacket.html
+redirect 301 /product/first-lite-north-branch-softshell-pants-copy/ https://www.badassoutdoorgear.com/north-branch-softshell-pants.html
+redirect 301 /product/first-lite-north-branch-jacket https://www.badassoutdoorgear.com/first-lite-north-branch-jacket.html
+redirect 301 /product/first-lite-mountain-athlete-compression-sock https://www.badassoutdoorgear.com/first-lite-mountain-athlete-compression-sock.html
+redirect 301 /product/first-lite-mountain-athlete-cold-weather-sock https://www.badassoutdoorgear.com/first-lite-mountain-athlete-cold-weather-sock.html
+redirect 301 /product/first-lite-llano-short-sleeve https://www.badassoutdoorgear.com/first-lite-llano-short-sleeve.html
+redirect 301 /product/first-lite-lightweight-glove https://www.badassoutdoorgear.com/first-lite-lightweight-glove.html
+redirect 301 /product/first-lite-kanab-lightweight-pant/ https://www.badassoutdoorgear.com/first-lite-kanab-2-merino-pant.html
+redirect 301 /product/first-lite-halstead-tech-fleece/ https://www.badassoutdoorgear.com/first-lite-halstead-tech-fleece11.html
+redirect 301 /product/first-lite-chama-hoody-14-zip-performance-layer/ https://www.badassoutdoorgear.com/first-lite-chama-14-zip.html
+redirect 301 /product/first-lite-chama-exp-14-zip https://www.badassoutdoorgear.com/first-lite-chama-exp-14-zip.html
+redirect 301 /product/first-lite-allegheny-performance-layers/ https://www.badassoutdoorgear.com/clothing-for-hunters/merino-wool-layers.html
+redirect 301 /product/first-lite-allegheny-exp-performance-layers/ https://www.badassoutdoorgear.com/clothing-for-hunters/merino-wool-layers.html
+redirect 301 /product/first-lite-allegheny-exp-bottoms https://www.badassoutdoorgear.com/first-lite-allegheny-exp-bottoms.html
+redirect 301 /product/fingerless-merino-wool-glove https://www.badassoutdoorgear.com/fingerless-merino-wool-glove.html
+redirect 301 /product/exo-jacket https://www.badassoutdoorgear.com/exo-jacket.html
+redirect 301 /product/equipment-lanyard https://www.badassoutdoorgear.com/equipment-lanyard.html
+redirect 301 /product/epek-broadhead/ https://www.badassoutdoorgear.com/g5-pink-montec-broadhead.html
+redirect 301 /product/element-jacket- https://www.badassoutdoorgear.com/element-jacket.html
+redirect 301 /product/eberlestock-nosegunner-bino-case https://www.badassoutdoorgear.com/eberlestock-nosegunner-bino-case.html
+redirect 301 /product/eberlestock-gunslinger-ii https://www.badassoutdoorgear.com/eberlestock-gunslinger-ii.html
+redirect 301 /product/eberlestock-gunrunner https://www.badassoutdoorgear.com/eberlestock-gunrunner.html
+redirect 301 /product/eat-salmon-t-shirt/ https://www.badassoutdoorgear.com/eat-salmon-the-other-pink-meat-funny-t-shirt.html
+redirect 301 /product/easton-stake-out-pack/ https://www.badassoutdoorgear.com/
+redirect 301 /product/easton-quickdraw-pack/ https://www.badassoutdoorgear.com/
+redirect 301 /product/easton-outfitters-hydra-fusion-tube-kit11 https://www.badassoutdoorgear.com/backpacks/solid-color-packs/womens-guide-1800.html
+redirect 301 /product/easton-flatline-waist-pack/ https://www.badassoutdoorgear.com/sale/easton-cross-shot.html
+redirect 301 /product/diablo-dos https://www.badassoutdoorgear.com/diablo-dos.html
+redirect 301 /product/deadeye-outfitters-mens-incoming-t-shirt/ https://www.badassoutdoorgear.com/deadeye-outfitters-incoming-elk-t-shirt11.html
+redirect 301 /product/deadeye-outfitters-loud-mouth-duck-call-america https://www.badassoutdoorgear.com/deadeye-outfitters-loud-mouth-duck-call-america.html
+redirect 301 /product/deadeye-outfitters-ladies-whitetail-skull-tee https://www.badassoutdoorgear.com/deadeye-outfitters-ladies-whitetail-skull-tee.html
+redirect 301 /product/core4-summit-jacket https://www.badassoutdoorgear.com/core4-summit-jacket.html
+redirect 301 /product/core4-stalker-beanie-sale https://www.badassoutdoorgear.com/core4-stalker-beanie-sale.html
+redirect 301 /product/core4-mid-mountain-hoodie-11 https://www.badassoutdoorgear.com/core4-mid-mountain-hoodie-11.html
+redirect 301 /product/core4element-torrent-rain-jacket/ https://www.badassoutdoorgear.com/c4-torrent-rain-jacket.html
+redirect 301 /product/core4element-switchback-pant/ https://www.badassoutdoorgear.com/core4-switchback-pant-sale.html
+redirect 301 /product/core4element-summit-jacket/ https://www.badassoutdoorgear.com/core4-summit-jacket.html
+redirect 301 /product/core4element-elevation-jacket/ https://www.badassoutdoorgear.com/elevation-jacket-charcoal.html
+redirect 301 /product/core4element-element-jacket/ https://www.badassoutdoorgear.com/element-jacket.html
+redirect 301 /product/cirrus-ultralight-insulating-puffy-jacket https://www.badassoutdoorgear.com/cirrus-ultralight-insulating-puffy-jacket.html
+redirect 301 /product/cell-phone-signal-booster-wireless/ https://www.badassoutdoorgear.com/wilson-electronics-cell-phone-signal-booster-wireless-4g.html
+redirect 301 /product/can-koozie https://www.badassoutdoorgear.com/can-koozie.html
+redirect 301 /product/c4-universal-optic-adapter-clearance https://www.badassoutdoorgear.com/c4-mini-universal-optic-adapter-clearance.html
+redirect 301 /product/c-4-optic-universal-adapter/ https://www.badassoutdoorgear.com/c4-universal-optic-adapter-clearance.html
+redirect 301 /product/c-3-optic-adapters/ https://www.badassoutdoorgear.com/c4-mini-universal-optic-adapter-clearance.html
+redirect 301 /product/c-1-custom-phone-cases/ https://www.badassoutdoorgear.com/phone-skope-c2-universal-phone-attachment.html
+redirect 301 /product/bowhunting-crack-of-dawn/ https://www.badassoutdoorgear.com/bowhunting-at-the-crack-of-dawn-t-shirt.html
+redirect 301 /product/bowhunting-at-the-crack-of-dawn-t-shirt https://www.badassoutdoorgear.com/bowhunting-at-the-crack-of-dawn-t-shirt.html
+redirect 301 /product/bow-boot https://www.badassoutdoorgear.com/
+redirect 301 /product/big-rack-hunter-t-shirt https://www.badassoutdoorgear.com/big-rack-hunter-t-shirt.html
+redirect 301 /product/be-the-decoy-wapiti-assassin-elk/ https://www.badassoutdoorgear.com/be-the-decoy-wapiti-assassin-elk11.html
+redirect 301 /product/be-the-decoy-antelope-hat/ https://www.badassoutdoorgear.com/be-the-decoy-blacktail-betty11.html
+redirect 301 /product/bear-spray-holster https://www.badassoutdoorgear.com/bear-spray-holster.html
+redirect 301 /product/bear-legend-series-ls6- https://www.badassoutdoorgear.com/bear-legend-series-ls6.html
+redirect 301 /product/badlands-tree-stand-day-pack https://www.badassoutdoorgear.com/badlands-tree-stand-day-pack.html
+redirect 301 /product/badlands-recon-day-pack-new-2013/ https://www.badassoutdoorgear.com/ladies-kali-day-pack.html
+redirect 301 /product/badlands-rain-cover https://www.badassoutdoorgear.com/badlands-rain-cover.html
+redirect 301 /product/badlands-magnetic-bino-case-max-1 https://www.badassoutdoorgear.com/badlands-magnetic-bino-case-max-1.html
+redirect 301 /product/badlands-ladies-kali-fanny-pack https://www.badassoutdoorgear.com/badlands-ladies-kali-fanny-pack.html
+redirect 301 /product/badlands-everything-pocket https://www.badassoutdoorgear.com/badlands-everything-pocket.html
+redirect 301 /product/badlands-diablo https://www.badassoutdoorgear.com/badlands-diablo.html
+redirect 301 /product/badlands-clutch-backpack https://www.badassoutdoorgear.com/badlands-clutch-backpack.html
+redirect 301 /product/badlands-black-jack-fanny-pack/ https://www.badassoutdoorgear.com/badlands-monster-fanny-pack.html
+redirect 301 /product/badlands-bino-z-new/ https://www.badassoutdoorgear.com/badlands-bino-z.html
+redirect 301 /product/badlands-ambush-fanny-pack https://www.badassoutdoorgear.com/badlands-ambush-fanny-pack.html
+redirect 301 /product/bad-ass-outdoor-gear-performance-hoodies https://www.badassoutdoorgear.com/bad-ass-outdoor-gear-performance-hoodies.html
+redirect 301 /product/bad-ass-koozie/ https://www.badassoutdoorgear.com/can-koozie.html
+redirect 301 /product/bad-ass-camo-blackorange-logo-hat/ https://www.badassoutdoorgear.com/bad-ass-outdoor-gear-broadhead-hoodie.html
+redirect 301 /product/aerowool-neck-gaiter https://www.badassoutdoorgear.com/aerowool-neck-gaiter.html
+
+#7 April 2017
+redirect 301 /blog/blog https://www.badassoutdoorgear.com/blog/
+redirect 301 /brand/easton-outfitters https://www.badassoutdoorgear.com/products/product-brands.html/
+redirect 301 /brand/first-lite https://www.badassoutdoorgear.com/products/product-brands.html/
+redirect 301 /product/core4-elevation-jacket-realtree-max-1charcoal https://www.badassoutdoorgear.com/core4-elevation-vest-11.html
+redirect 301 /product/bear-prowess-rth-package https://www.badassoutdoorgear.com/bear-prowess-rth-package.html
+redirect 301 /product/geigerrig-in-line-virus-water-filter https://www.badassoutdoorgear.com/geigerrig-in-line-virus-water-filter.html
+redirect 301 /product/algus-crew-short-sleeve-top https://www.badassoutdoorgear.com/algus-crew-short-sleeve-top.html
+redirect 301 /product/bad-ass-scope-eyeshield-triple-pack https://www.badassoutdoorgear.com/bad-ass-scope-eyeshield-triple-pack.html
+redirect 301 /product/big-rack-hunter-window-decal https://www.badassoutdoorgear.com/big-rack-hunter-window-decal.html
+redirect 301 /product/core4-selway-vest11 https://www.badassoutdoorgear.com/core4-selway-vest11.html
+redirect 301 /product/legal-addiction-whitetail-window-decal https://www.badassoutdoorgear.com/legal-addiction-whitetail-window-decal.html
+redirect 301 /product/rangefinder-pouch https://www.badassoutdoorgear.com/rangefinder-pouch.html
+redirect 301 /product/selway-beanie-black-only https://www.badassoutdoorgear.com/selway-beanie-black-only.html
+redirect 301 /product/g5-pink-montec-broadhead https://www.badassoutdoorgear.com/g5-pink-montec-broadhead.html
+redirect 301 /product/divide-folder https://www.badassoutdoorgear.com/divide-folder.html
+redirect 301 /product/iscope-phone-back-plates https://www.badassoutdoorgear.com/iscope-phone-back-plates.html
+redirect 301 /product/mud-river-duke-dog-lead https://www.badassoutdoorgear.com/mud-river-duke-dog-lead.html
+redirect 301 /product/womens-syringa-short1 https://www.badassoutdoorgear.com/womens-syringa-short1.html
+redirect 301 /product/pioneer-junior-jacket https://www.badassoutdoorgear.com/pioneer-junior-jacket.html
+redirect 301 /product/first-lite-llano-short-sleeve1 https://www.badassoutdoorgear.com/first-lite-llano-short-sleeve.html
+redirect 301 /product/guide-2000- https://www.badassoutdoorgear.com/guide-2000.html
+redirect 301 /product/outdoor-edge-mini-gripmini-blazemini-babe https://www.badassoutdoorgear.com/outdoor-edge-mini-gripmini-blazemini-babe.html
+redirect 301 /product/prois-pro-edition-pants https://www.badassoutdoorgear.com/prois-pro-edition-pants.html
+redirect 301 /product/salomon-speedcross-3-trail-running-shoes https://www.badassoutdoorgear.com/salomon-speedcross-3-trail-running-shoes.html
+redirect 301 /product/stormkloth-ii-womens-performance-fleece-hunting-jacket11 https://www.badassoutdoorgear.com/stormkloth-ii-womens-performance-fleece-hunting-jacket11.html
+redirect 301 /product/fleece-neck-warmer https://www.badassoutdoorgear.com/fleece-neck-warmer.html
+redirect 301 /brand/first-lite https://www.badassoutdoorgear.com/products/product-brands.html/
+redirect 301 /product/bad-ass-outdoor-gear-lightweight-black-hat https://www.badassoutdoorgear.com/bad-ass-outdoor-gear-lightweight-black-hat.html
+redirect 301 /brand/deadeye-outfitters https://www.badassoutdoorgear.com/products/product-brands.html/
+redirect 301 /product/badlands-calor-pant-approach https://www.badassoutdoorgear.com/badlands-calor-pant-approach.html
+redirect 301 /product/deadeye-outfitters-good-ol-days-muley-t-shirt11 https://www.badassoutdoorgear.com/deadeye-outfitters-good-ol-days-muley-t-shirt11.html
+redirect 301 /product/dobson-aerowool-boxer-briefs https://www.badassoutdoorgear.com/dobson-aerowool-boxer-briefs.html
+redirect 301 /brand/Rambo https://www.badassoutdoorgear.com/products/product-brands.html/
+
+#8 April
+redirect 301 /product/first-lite-softshell-shooting-glove-2011 https://www.badassoutdoorgear.com/first-lite-softshell-shooting-glove-2011.html
+redirect 301 /product/algus-beanie https://www.badassoutdoorgear.com/algus-beanie.html
+redirect 301 /product/easton-outfitters-hydro-scout-120011 https://www.badassoutdoorgear.com/easton-outfitters-hydro-scout-120011.html
+redirect 301 /brand/easton-outfitters https://www.badassoutdoorgear.com/products/product-brands.html/
+redirect 301 /product/quest-radical-bow-dth-package https://www.badassoutdoorgear.com/quest-radical-bow-dth-packages.html
+redirect 301 /product/core4-pivot-qtr-zip-1 https://www.badassoutdoorgear.com/core4-pivot-qtr-zip-1.html
+redirect 301 /product/quest-storm-bow-dth-package https://www.badassoutdoorgear.com/quest-storm-bow-dth-package.html
+redirect 301 /product/minaret-aerowool-crew-top https://www.badassoutdoorgear.com/minaret-aerowool-crew-top.html
+redirect 301 /product/first-lite-corrugate-guide-pant https://www.badassoutdoorgear.com/first-lite-corrugate-guide-pant.html
+redirect 301 /product/assault-qtr-zip-sale https://www.badassoutdoorgear.com/assault-qtr-zip-sale.html
+redirect 301 /product/tribeone-mininet https://www.badassoutdoorgear.com/tribeone-mininet.html
+redirect 301 /product/woodbury-mid-season-jacket-fusion- https://www.badassoutdoorgear.com/woodbury-midseason-jacket.html
+redirect 301 /product/easton-tech-pocket-small11 https://www.badassoutdoorgear.com/easton-tech-pocket-large11.html
+redirect 301 /product/full-bore-xt-5600-max1 https://www.badassoutdoorgear.com/easton-outfitters-bow-hunter-2000.html
+redirect 301 /product/eberlestock-h20-bladder https://www.badassoutdoorgear.com/eberlestock-h20-bladder.html
+redirect 301 /product/new-badlands-h2o-bladder- https://www.badassoutdoorgear.com/new-badlands-h2o-bladder.html
+redirect 301 /product/eberlestock-halftrack https://www.badassoutdoorgear.com/eberlestock-halftrack.html
+redirect 301 /product/wildgame-innovations-rage-5-trail-camera https://www.badassoutdoorgear.com/wildgame-innovations-razor-6-trail-camera.html
+redirect 301 /brand/leica-optics https://www.badassoutdoorgear.com/products/product-brands.html/
+redirect 301 /product/womens-salomon-speedcross-4-shoes https://www.badassoutdoorgear.com/womens-salomon-speedcross-4-shoes.html
+redirect 301 /brand/scott https://www.badassoutdoorgear.com/products/product-brands.html/
+redirect 301 /product/razor-6-lightsout-trail-camera1 https://www.badassoutdoorgear.com/razor-6-lightsout-trail-camera1.html
+
+#20 April
+Redirect 301 /product/stormkloth-ii-performance-original-hunting-jacket https://www.badassoutdoorgear.com/stormkloth-ii-womens-performance-original-hunting-jacket.html
+Redirect 301 /product/s3-series-4-12-x-50-sh-bdc-riflescope https://www.badassoutdoorgear.com/s3-series-4-12-x-50-sh-bdc-riflescope.html
+Redirect 301 /product/badlands-rev-pant https://www.badassoutdoorgear.com/badlands-rev-pant.html
+Redirect 301 /product/algus-neck-gaiter https://www.badassoutdoorgear.com/algus-neck-gaiter.html
+Redirect 301 /product/calor-14-zip https://www.badassoutdoorgear.com/calor-14-zip.html
+Redirect 301 /product/sanctuary-jacket https://www.badassoutdoorgear.com/sanctuary-jacket.html
+Redirect 301 /product/badlands-2200 https://www.badassoutdoorgear.com/2200-pack.html
+Redirect 301 /product/deadeye-outfitters-heated-t-shirt https://www.badassoutdoorgear.com/deadeye-outfitters-heated-t-shirt11.html
+Redirect 301 /product/kali-ladies-fanny-pack https://www.badassoutdoorgear.com/ladies-kali-day-pack.html
+Redirect 301 /product/bad-ass-ladies-t-shirt https://www.badassoutdoorgear.com/bad-ass-outdoor-gear-broadhead-hoodie.html
+Redirect 301 /product/easton-tech-pocket-large11 https://www.badassoutdoorgear.com/easton-tech-pocket-large11.html
+Redirect 301 /product/kodi-combo https://www.badassoutdoorgear.com/kodi-combo.html
+Redirect 301 /product/badlands-pursuit-day-pack https://www.badassoutdoorgear.com/pursuit.html
+Redirect 301 /product/badlands-birdvest-free-mud-river-bowl https://www.badassoutdoorgear.com/obsession-defcon-m7.html
+Redirect 301 /product/deadeye-outfitters-good-ol-days-muley-t-shirt https://www.badassoutdoorgear.com/deadeye-outfitters-good-ol-days-muley-t-shirt11.html
+Redirect 301 /product/easton-fred-eichler-fulldraw-3000-pack https://www.badassoutdoorgear.com/easton-pickup-xt-3000.html
+Redirect 301 /product/s3-series-10-x-42-binocular https://www.badassoutdoorgear.com/s3-series-10-x-42-binocular.html
+Redirect 301 /product/stormkloth-ii-womens-performance-fleece-hunting-vest https://www.badassoutdoorgear.com/stormkloth-ii-womens-performance-fleece-hunting-vest11.html
+Redirect 301 /product/bad-ass-eat-salmon-the-other-pink-meat https://www.badassoutdoorgear.com/eat-salmon-the-other-pink-meat-funny-t-shirt.html
+Redirect 301 /product/bad-ass-ladies-scoop-neck-tee11 https://www.badassoutdoorgear.com/bad-ass-outdoor-gear-broadhead-hoodie.html
+Redirect 301 /product/core4-element-pant- https://www.badassoutdoorgear.com/c4-element-pant.html
+Redirect 301 /product/easton-outfitters-guide-2000 https://www.badassoutdoorgear.com/guide-2000.html
+Redirect 301 /product/core4-boot-gaiters https://www.badassoutdoorgear.com/traverse-hunting-gaiters.html
+Redirect 301 /product/mud-river-collapsible-quick-quack-dog-bowl https://www.badassoutdoorgear.com/mud-river-duke-dog-lead.html
+Redirect 301 /product/ladies-t-back-tank https://www.badassoutdoorgear.com/womens-artemis-hoody.html
+Redirect 301 /brand/bad-ass https://www.badassoutdoorgear.com/products/product-brands.html/
+Redirect 301 /product/2200-pack https://www.badassoutdoorgear.com/2200-pack.html
+Redirect 301 /brand/leica https://www.badassoutdoorgear.com/products/product-brands.html/
+Redirect 301 /brand/tribe-one-outdoors https://www.badassoutdoorgear.com/products/product-brands.html/
+Redirect 301 /product/bad-ass-flexfit-hat https://www.badassoutdoorgear.com/flexfit-flat-brim-hat.html
+Redirect 301 /brand/styrka-optics https://www.badassoutdoorgear.com/products/product-brands.html/
+Redirect 301 /product/hybrid-jacket https://www.badassoutdoorgear.com/hybrid-jacket.html
+Redirect 301 /product/eberlestock-cherry-bomb https://www.badassoutdoorgear.com/eberlestock-cherry-bomb.html
+Redirect 301 /product/gamegetter-xt-1700-max1 https://www.badassoutdoorgear.com/gamegetter-xt-1700-max1.html
+Redirect 301 /product/new-geovid-hd-r-laser-rangefinder-1042-binoculars https://www.badassoutdoorgear.com/leica-geovid-hd-b-laser-rangefinder-1042-binoculars-with-ballistics-code-u1.html
+Redirect 301 /brand/bear-archery https://www.badassoutdoorgear.com/products/product-brands.html/
+Redirect 301 /product/brimmed-beanie https://www.badassoutdoorgear.com/first-lite-brimmed-beanie.html
+Redirect 301 /product/bad-ass-ladies-v-neck-tee https://www.badassoutdoorgear.com/bad-ass-outdoor-gear-broadhead-hoodie.html
+Redirect 301 /product/klymit-static-v-sleeping-pad https://www.badassoutdoorgear.com/inertia-x-frame-sleeping-pad.html
+Redirect 301 /product/eberlestock-blue-widow-pack-closeout11 https://www.badassoutdoorgear.com/salomon-speedcross-3-cs-trail-running-shoes.html
+Redirect 301 /product/eberlestock-team-elk-pack-free-bad-ass-t-shirt11 https://www.badassoutdoorgear.com/be-the-decoy-wapiti-assassin-elk11.html
+Redirect 301 /product/full-bore-xt-5600 https://www.badassoutdoorgear.com/quest-radical-bow-dth-packages.html
+Redirect 301 /product/easton-outfitters-hydra-fusion-tube-kit https://www.badassoutdoorgear.com/easton-outfitters-hydra-fusion-tube-kit11.html
+Redirect 301 /product/deadeye-outfitters-ram-skull-t-shirt11 https://www.badassoutdoorgear.com/ladies-ram-skull-tee.html
+Redirect 301 /product/eberlestock-blue-widow-pack-closeout https://www.badassoutdoorgear.com/bad-ass-scope-eyeshield-triple-pack.html
+Redirect 301 /product/bad-ass-t-shirt https://www.badassoutdoorgear.com/mens-design-t-shirt.html
+Redirect 301 /product/performance-hoodies1 https://www.badassoutdoorgear.com/bad-ass-outdoor-gear-broadhead-hoodie.html
+Redirect 301 /product/stormkloth-ii-performance-original-vest https://www.badassoutdoorgear.com/stormkloth-ii-performance-original-vest-max1.html
+Redirect 301 /product/stormkloth-ii-performance-fleece-hunting-jacket https://www.badassoutdoorgear.com/stormkloth-ii-performance-fleece-hunting-jacket11.html
+Redirect 301 /product/core4-element-tek-ball-cap- https://www.badassoutdoorgear.com/core4-merino-bottoms-11.html
+Redirect 301 /product/stormkloth-ii-womens-performance-fleece-hunting-jacket https://www.badassoutdoorgear.com/stormkloth-ii-womens-performance-fleece-hunting-jacket11.html
+Redirect 301 /product/mud-river-oasis-folding-dog-bowl https://www.badassoutdoorgear.com/mud-river-duke-dog-lead.html
+Redirect 301 /product/core4-selway-vest https://www.badassoutdoorgear.com/core4-selway-vest11.html
+Redirect 301 /product/badlands-h2o-bladder-sale https://www.badassoutdoorgear.com/new-badlands-h2o-bladder.html
+Redirect 301 /product/quest-forge-bow-dth-package https://www.badassoutdoorgear.com/quest-forge-bowdth-package.html
+Redirect 301 /product/core4-selway-zip-shirt11 https://www.badassoutdoorgear.com/selway-zip-shirt-max1.html
+Redirect 301 /product/easton-talus-fixed-frame-6800-sale https://www.badassoutdoorgear.com/talus-fixed-frame-6800-last-one-max1.html
+Redirect 301 /brand/rambo https://www.badassoutdoorgear.com/products/product-brands.html/
+Redirect 301 /product/outdoor-edge- https://www.badassoutdoorgear.com/outdoor-edge.html
+Redirect 301 /product/shark https://www.badassoutdoorgear.com/products/product-brands.html/
+Redirect 301 /product/camera-day-pack https://www.badassoutdoorgear.com/x2-day-pack.html
+Redirect 301 /product/core4-torrent-rain-pant-11 https://www.badassoutdoorgear.com/c4-torrent-rain-jacket.html
+Redirect 301 /product/bad-ass-ladies-t-back-tank11 https://www.badassoutdoorgear.com/bad-ass-outdoor-gear-broadhead-hoodie.html
+Redirect 301 /product/mud-river-hoss-dog-food-bag https://www.badassoutdoorgear.com/mud-river-duke-dog-lead.html
+Redirect 301 /product/easton-fullbore-xt-3600 https://www.badassoutdoorgear.com/womens-bowhunter-1800.html
+Redirect 301 /product/victory-laser-rangefinder-free-bino-x https://www.badassoutdoorgear.com/victory-laser-rangefinder.html
+Redirect 301 /brand/phone-skope https://www.badassoutdoorgear.com/products/product-brands.html/
+Redirect 301 /product/easton-compact-al5-large https://www.badassoutdoorgear.com/first-lite-corrugate-guide-pant.html
+Redirect 301 /brand/badlands https://www.badassoutdoorgear.com/products/product-brands.html/
+Redirect 301 /product/merino-boxers-clearance11 https://www.badassoutdoorgear.com/core4-merino-bottoms-11.html
+Redirect 301 /product/bad-ass-eat-tuna-the-other-pink-meat https://www.badassoutdoorgear.com/eat-tuna-the-other-pink-meat-funny-t-shirt.html
+Redirect 301 /product/woodbury-mid-season-jacket https://www.badassoutdoorgear.com/woodbury-midseason-jacket.html
+Redirect 301 /product/badlands-stealth-day-pack/ https://www.badassoutdoorgear.com/badlands-tree-stand-day-pack.html
+Redirect 301 /product/llano-14-zip- https://www.badassoutdoorgear.com/first-lite-llano-14-zip.html
+Redirect 301 /product/easton-quickdraw-xt-1200 https://www.badassoutdoorgear.com/easton-outfitters-hydro-scout-120011.html
+Redirect 301 /product/bad-ass-flexfit-mesh-hat11 https://www.badassoutdoorgear.com/bad-ass-flexfit-110-flat-brim.html
+Redirect 301 /product/stormkloth-ii-fleece-leg-gaiters https://www.badassoutdoorgear.com/stormkloth-ii-fleece-gloves11.html
+Redirect 301 /product/first-lite-boundary-stormtight-jacket https://www.badassoutdoorgear.com/first-lite-boundary-stormtight-pant11.html
+Redirect 301 /product/ballistic-trajectory-bipod https://www.badassoutdoorgear.com/ballistic-rangefinder-pouch.html
+Redirect 301 /product/easton-the-hinsch-xt-700 https://www.badassoutdoorgear.com/easton-tech-pocket-large11.html
+Redirect 301 /product/deadeye-outfitters-ram-skull-t-shirt https://www.badassoutdoorgear.com/deadeye-outfitters-heated-t-shirt11.html
+Redirect 301 /product/core4-highline-pant https://www.badassoutdoorgear.com/core4-merino-bottoms-11.html
+Redirect 301 /product/badlands-black-jack-fanny-pack https://www.badassoutdoorgear.com/first-lite-womens-lupine-crew.html
+Redirect 301 /product/first-lite-labrador-sweater https://www.badassoutdoorgear.com/first-lite-corrugate-guide-pant.html
+Redirect 301 /product/bad-ass-sexdaily-t-shirt https://www.badassoutdoorgear.com/sexdaily-funny-t-shirt.html
+Redirect 301 /product/first-lite-womens-syringa-short https://www.badassoutdoorgear.com/womens-syringa-short1.html
+Redirect 301 /product/klymit-kinetic-double-diamond-vest https://www.badassoutdoorgear.com/inertia-x-frame-sleeping-pad.html
+Redirect 301 /product/prois-generation-x-pants https://www.badassoutdoorgear.com/prois-generation-x-pants.html
+Redirect 301 /product/wildgame-innovations-rage-5-trail-camer https://www.badassoutdoorgear.com/wildgame-innovations-razor-6-trail-camera.html
+Redirect 301 /brand/wilson-electronics https://www.badassoutdoorgear.com/products/product-brands.html/
+Redirect 301 /product/bad-ass-flexfit-hat1 https://www.badassoutdoorgear.com/flexfit-flat-brim-hat.html
+Redirect 301 /product/zeiss-conquest-hd-1556-binoculars-free-bino-x https://www.badassoutdoorgear.com/phone-skope-custom-phone-cases.html
+Redirect 301 /product/bad-ass-sexdaily-t-shirt/ https://www.badassoutdoorgear.com/sexdaily-funny-t-shirt.html
+Redirect 301 /product/first-lite-halstead-tech-fleece https://www.badassoutdoorgear.com/first-lite-halstead-tech-fleece11.html
+Redirect 301 /product/badlands-pursuit-day-pack1 https://www.badassoutdoorgear.com/badlands-tree-stand-day-pack.html
+Redirect 301 /product/core4-pivot-qtr-zip-1 https://www.badassoutdoorgear.com/core4-pivot-qtr-zip-1.html
+Redirect 301 /product/first-lite-corrugate-guide-pant https://www.badassoutdoorgear.com/first-lite-corrugate-guide-pant.html
+
+#22 April
+redirect 301 /product/badlands-ox-pack-frame https://www.badassoutdoorgear.com/inertia-x-frame-sleeping-pad.html
+redirect 301 /product/easton-stakeout-xt-1700 https://www.badassoutdoorgear.com/easton-outfitters-day-tripper-1700.html
+redirect 301 /product/easton-h20-bladder https://www.badassoutdoorgear.com/new-badlands-h2o-bladder.html
+redirect 301 /product/eberlestock-mini-me https://www.badassoutdoorgear.com/tribeone-mininet.html
+redirect 301 /product/upland-game-vest https://www.badassoutdoorgear.com/upland-game-vest.html
+redirect 301 /product/core4-element-glove-11 https://www.badassoutdoorgear.com/core4-merino-bottoms-11.html
+redirect 301 /product/bad-ass-outdoor-gear-ladies-scoop-neck-tee https://www.badassoutdoorgear.com/bad-ass-outdoor-gear-broadhead-hoodie.html
+redirect 301 /product/eberlestock-j34-just-one https://www.badassoutdoorgear.com/j34-just-one.html
+redirect 301 /product/first-lite-boundary-stormtight-pant https://www.badassoutdoorgear.com/first-lite-boundary-stormtight-pant11.html
+redirect 301 /product/be-the-decoy-speed-goat https://www.badassoutdoorgear.com/speed-goat-decoy.html
+redirect 301 /product/core4-merino-wool-hoodie https://www.badassoutdoorgear.com/merino-wool-hoodie-max1.html
+redirect 301 /product/badlands-ambush-fanny-pack1 https://www.badassoutdoorgear.com/badlands-ambush-fanny-pack.html
+redirect 301 /product/badlands-nano-fanny-pack https://www.badassoutdoorgear.com/badlands-monster-fanny-pack.html

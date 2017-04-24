@@ -1,0 +1,149 @@
+<?xml version="1.0"?>
+
+<!-- 
+<page layout="1column" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd"> 
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+
+        <referenceContainer name="content">
+            <block class="Infortis\Base\Block\Product\View" name="product-view-wrapper" template="product/view.phtml" before="-">
+                <container name="container_product_image_1" label="Product View, Image Column" />
+                <container name="container_product_primary_1" label="Product View, Primary Column, Container 1" />
+                <container name="container_product_primary_2" label="Product View, Primary Column, Container 2" />
+                <container name="container_product_secondary_1" label="Product View, Secondary Column, Container 1" />
+                <container name="container_product_secondary_2" label="Product View, Secondary Column, Container 2" />
+                <container name="container_product_lower_primary_1" label="Product View, Lower Primary Column, Container 1" />
+                <container name="container_product_lower_primary_2" label="Product View, Lower Primary Column, Container 2" />
+                <container name="container_product_lower_secondary_1" label="Product View, Lower Secondary Column, Container 1" />
+                <container name="container_product_lower_secondary_2" label="Product View, Lower Secondary Column, Container 2" />
+
+                <container name="container_product_lower_secondary_two" label="Product View, Lower Secondary Column Two" />
+                <!-- Static blocks -->
+                <block class="Magento\Cms\Block\Block" name="block_product_secondary_bottom">
+                    <arguments>
+                        <argument name="block_id" xsi:type="string">block_product_secondary_bottom</argument>
+                    </arguments>
+                </block>
+                
+            </block>
+        </referenceContainer>
+
+        <!-- Reset attributes of main containers -->
+        <referenceContainer name="product.info.main" htmlTag="" htmlClass="" before="-" />
+        <referenceContainer name="product.info.media" htmlTag="" htmlClass="" after="product.info.main" />
+
+        <!-- Insert product view blocks into the new product view wrapper -->
+        <move element="product.info.main" destination="product-view-wrapper" />
+        <move element="product.info.media" destination="product-view-wrapper" />
+        <move element="bundle.options.container" destination="product-view-wrapper" />
+        <move element="product.info.details" destination="product-view-wrapper" />
+        <move element="catalog.product.related" destination="product-view-wrapper" />
+        <move element="product.info.upsell" destination="product-view-wrapper" />
+
+        <!-- Move some blocks to new positions -->
+        <!-- <move element="product.info.stock.sku" destination="product.info.price" after="product.price.final" /> -->
+        <!-- <move element="product.info.social" destination="product.info.main" after="-" /> -->
+        <!--custom by web india-->
+        <move element="rewards.social.buttons" destination="product.info.main" after="product.info.social" />
+        
+        <!--        <referenceContainer name="product.info.social">
+            <block class="Magento\Catalog\Block\Product\View" name="product.social.buttons" template="product/view/social_buttons.phtml"/>
+        </referenceContainer>-->
+       
+        <move element="product.info.overview" destination="product.info.main" before="product.info.price" />
+        <move element="container_product_primary_1" destination="product.info.main" after="page.main.title" />
+        <move element="container_product_primary_2" destination="product.info.main" after="-" />
+
+        <!-- Move some blocks outside the "product.info.main" to manipulate their position inside template file -->
+        <move element="page.main.title" destination="product-view-wrapper" />
+        <move element="product.info.review" destination="product-view-wrapper" />
+
+        <!-- Product collateral data (tabs) -->
+        <referenceBlock name="product.info.details" template="Infortis_Base::product/view/details.phtml" >
+            <arguments>
+                <argument name="show_tabs" xsi:type="helper" helper="Infortis\Base\Helper\Template\Catalog\Product\View::showTabs" />
+            </arguments>
+            <!-- Custom static blocks as tabs -->
+            <!--            <block class="Magento\Cms\Block\Block" name="product_cms_block1" group="detailed_info">
+                <arguments>
+                    <argument name="block_id" xsi:type="string">block_product_tab1</argument>
+                    <argument name="title" xsi:type="helper" helper="Infortis\Base\Helper\Template\Catalog\Product\View::getStaticBlockTitle">
+                        <param name="id">block_product_tab1</param>
+                    </argument>
+                </arguments>
+            </block>-->
+
+            <!--             <block class="Magento\Cms\Block\Block" name="product_cms_block2" group="detailed_info">
+                <arguments>
+                    <argument name="block_id" xsi:type="string">block_product_tab2</argument>
+                    <argument name="title" xsi:type="helper" helper="Infortis\Base\Helper\Template\Catalog\Product\View::getStaticBlockTitle">
+                        <param name="id">block_product_tab2</param>
+                    </argument>
+                </arguments>
+            </block>-->
+            <!--coding by webindia-->
+            <block class="Magento\Catalog\Block\Product\View\Description" template="product/view/sizechart.phtml" name="sizechart.tab" group="detailed_info">
+                <arguments>
+                    <argument name="at_call" xsi:type="string">getSizeChart</argument>
+                    <argument name="at_code" xsi:type="string">size_chart</argument>
+                    <argument name="css_class" xsi:type="string">size_chart</argument>
+                    <argument name="title" translate="true" xsi:type="string">Sizing Chart</argument>
+                </arguments>
+            </block> 
+            <block class="Magento\Catalog\Block\Product\View\Attributes" template="product/view/spefication.phtml" name="specification.tab" >
+                <arguments>
+                    <argument name="at_call" xsi:type="string">getSpecification</argument>
+                    <argument name="at_code" xsi:type="string">specification</argument>
+                    <argument name="css_class" xsi:type="string">specification</argument>
+                    <!--<argument name="at_label" xsi:type="string">none</argument>-->
+                    <argument name="title" translate="true" xsi:type="string">Layering Guide</argument>
+                </arguments>
+            </block>
+            <block class="Magento\Catalog\Block\Product\View\Description" template="product/view/sizechart.phtml" name="sizechart.tab" group="detailed_info">
+                <arguments>
+                    <argument name="at_call" xsi:type="string">getSizeChartUrl</argument>
+                    <argument name="at_code" xsi:type="string">size_chart_url</argument>
+                    <argument name="css_class" xsi:type="string">size_chart_url</argument>
+                    <argument name="title" translate="true" xsi:type="string">Sizing Chart</argument>
+                </arguments>
+            </block> 
+            <referenceBlock name="product.attributes">
+                <arguments>
+                    <argument translate="true" name="title" xsi:type="string">Specifications</argument>
+                </arguments>
+            </referenceBlock>
+            <!--coding by webindia-->
+            
+        </referenceBlock>
+
+        <referenceBlock name="catalog.product.related">
+            <action method="setTemplate">
+                <argument name="template" xsi:type="helper" helper="Infortis\Base\Helper\Template\Catalog\Product\View::getRelatedProductsTemplate" />
+            </action>
+        </referenceBlock>
+
+        <referenceBlock name="product.info.upsell">
+            <action method="setTemplate">
+                <argument name="template" xsi:type="helper" helper="Infortis\Base\Helper\Template\Catalog\Product\View::getUpsellProductsTemplate" />
+                <!-- TODO: -->
+                <!-- <argument name="is_responsive" xsi:type="string">false</argument>
+                <argument name="show_items" xsi:type="string">3</argument> -->
+            </action>
+        </referenceBlock>
+
+        <referenceBlock name="checkout.cart.crosssell">
+            <action method="setTemplate">
+                <argument name="template" xsi:type="string">Infortis_Base::product/list/slider.phtml</argument>
+            </action>
+        </referenceBlock>
+
+        <!--coding by webindia-->
+        <!--<referenceBlock name="product.attributes" remove="true"/>-->
+        <!--coding by webindia-->
+        
+         
+        <referenceBlock name="paypal.partner.right.logo" remove="true"/>
+      
+    </body>
+</page>

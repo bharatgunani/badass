@@ -1,0 +1,160 @@
+<!--@subject A gift card from {{var giftvoucher.getCustomerName()}} @-->
+<!--@vars
+{"htmlescape var=$name":"Recipient Name",
+"htmlescape var=$sendername":"Sender name",
+"var code":"Gift Card Code",
+"var balance":"Gift Card Balance",
+"var status":"Status",
+"htmlescape var=$message":"Message",
+"var expiredat":"Expired At"}
+@-->
+
+<!--@styles
+body,td { background:#FFFFFF; margin:0; padding:0; color:#2f2f2f; font:13px/1.35em Verdana, Arial, Helvetica, sans-serif; }
+pre{ white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap; word-wrap: break-word;}
+@-->
+
+<div style="font:13px/1.35em Verdana, Arial, Helvetica, sans-serif;">
+    <table cellspacing="0" cellpadding="0" border="0" width="98%" style="margin-top:10px; font:11px/1.35em Verdana, Arial, Helvetica, sans-serif; margin-bottom:10px;">
+        <tr>
+            <td align="center" valign="top">
+                <!-- [ header starts here] -->
+                <table cellspacing="0" cellpadding="0" border="0" width="650">
+                    <tr style="background: #f5f5f5;">
+                    <td class="header" style="text-align: center;">
+                        <a class="logo" href="{{store url=""}}">
+                            <img
+                                {{if logo_width}}
+                                    width="{{var logo_width}}"
+                                {{else}}
+                                    width="180"
+                                {{/if}}
+
+                                {{if logo_height}}
+                                    height="{{var logo_height}}"
+                                {{else}}
+                                    height="52"
+                                {{/if}}
+
+                                src="{{var logo_url}}"
+                                alt="{{var logo_alt}}"
+                                border="0"
+                            />
+                        </a>
+                    </td>
+                    <td style="padding: 25px 20px; white-space: nowrap; background: #f5f5f5; vertical-align: middle; text-align: left;">
+                       <a style="font-size: 14px; text-transform: uppercase; font-weight: 600; margin: 0px 10px; text-decoration: underline;margin-right: 10px;" href="{{store direct_url=""}}" target="_blank">HOME</a>
+                       <a style="font-size: 14px; text-transform: uppercase; font-weight: 600; margin: 0px 10px; text-decoration: underline;margin-right: 10px;" href="{{store direct_url="archery-products.html"}}" target="_blank">ARCHERY</a>
+                       <a style="font-size: 14px; text-transform: uppercase; font-weight: 600; margin: 0px 10px; text-decoration: underline;margin-right: 10px;" href="{{store direct_url="backpacks.html"}}" target="_blank">BACKPACKS</a>
+                       <a style="font-size: 14px; text-transform: uppercase; font-weight: 600; margin: 0px 10px; text-decoration: underline;" href="{{store direct_url="clothing-for-hunters.html"}}" target="_blank">CLOTHING</a> 
+                    </td>
+                </tr>
+                    <!-- <tr>
+                        <td valign="top">
+                            <a href="{{var store.getBaseUrl()}}">
+                                <img src="{{var logo_url}}" alt="{{var store.getFrontendName()}}"  style="margin-bottom:10px;" border="0"/>
+                            </a>
+                        </td>
+                    </tr> -->
+                </table>
+
+                <!-- [ middle starts here] -->
+                <table cellspacing="0" cellpadding="0" border="0" width="650">
+                    <tr>
+                        <td valign="top">
+                            <p style="line-height: 24px; font-size: 13px;">
+                                <strong style="display: block; font-size: 16px;">Dear {{var giftvoucher.getRecipientName()}},</strong>
+                                We are glad to inform that <strong>{{var giftvoucher.getCustomerName()}}</strong> has sent you a Gift Card from {{var store.getFrontendName()}}.<br/>
+                                You can comfortably use the Gift Card(s) to purchase other products at 
+                                <a href="{{var store.getBaseUrl()}}" style="display: inline-block;">{{var store.getFrontendName()}}</a> or add it to your Gift Card list by clicking  
+                                <a href="{{var addurl}}"> here</a>.<br/>
+                                {{if giftvoucher.getGiftcodeTemplateId()}}
+                                Print Gift Card <a href="{{var store.getBaseUrl()}}/giftvoucher/index/printemail/k/{{var secure_key}}">now</a>
+                                {{/if}}
+                            </br>
+                                
+                            </p>                            
+                        </td>
+                    </tr>
+                    <tr>
+                        {{if giftvoucher.getGiftcardTemplateId()}}
+                        <td style="padding: 15px 0px 15px 0px" align="center" width="600">
+                            <img src="{{var url}}"  style=" width: 100%; height: auto; "/>
+                        </td>
+                        {{else}}
+                        <td>
+                            <br/>
+                                <p>Your Gift code: {{var giftvoucher.getGiftCode()}}
+                                <br/>
+                                Your Gift code value: {{var balance}}</p>
+                            <br/>
+                        </td>
+                        {{/if}}
+
+                    </tr>
+                    <tr>
+                        <td>
+                            <p>
+                                If you have any questions on your Gift card, please feel free to contact us at <a href="mailto:{{config path='trans_email/ident_support/email'}}" style="color:#1E7EC8;">{{config path='trans_email/ident_support/email'}}</a> or by phone at {{config path='general/store_information/phone'}}.
+                            </p>
+                            <p>Yours sincerely,<br/><strong>{{var store.getFrontendName()}}</strong></p>
+                        </td>
+                    </tr>
+                </table>
+                <!-- footer part -->
+                <table cellspacing="0" cellpadding="0" border="0" width="650" style="padding: 0px 10px; background: #f5f5f5;">
+                    <tr>
+                                <td  style="border-bottom:2px solid #717171; padding: 10px 0px 20px 0px !important; 
+                                text-align: left;vertical-align: middle;">
+                                    <a style="font-size: 13px; font-weight: bold; text-transform: uppercase; color: #6f6f6f; display: inline-block;
+                                    margin-right: 6px;" target="_blank" href="{{store direct_url="support/frequently-asked-questions.html"}}">FAQ</a>
+                                    <a style="font-size: 13px;  font-weight: bold; text-transform: uppercase; color: #6f6f6f; display: inline-block;
+                                    margin-right: 6px;" target="_blank" href="{{store direct_url="support/return-policy.html"}}">RETURNS</a>
+                                    <a style="font-size: 13px; font-weight: bold; text-transform: uppercase; color: #6f6f6f; display: inline-block;
+                                    margin-right: 0px;" target="_blank" href="{{store direct_url="support/terms-of-use.html"}}">
+                                    TERMS OF USE</a>
+                                </td>
+                                <td style="border-bottom:2px solid #717171; padding: 15px 0px 20px 0px !important; 
+                                text-align: right;vertical-align: middle;">
+                                    <a href="https://www.facebook.com/BadAssOutdoorGear" target="_blank" style="display: inline-block; vertical-align: middle; margin-right: 5px;">
+                                        <img style="margin-top: 10px;" src="{{view url='images/email-icon/icon-1.png'}}" alt=""  style="display: block;" />
+                                    </a>
+                                    <a href="https://twitter.com/intent/user?screen_name=BadAssOutdoor" target="_blank" style="display: inline-block; vertical-align: middle; margin-right: 5px;">
+                                        <img style="margin-top: 10px;" src="{{view url='images/email-icon/icon-2.png'}}" alt=""  style="display: block;" />
+                                    </a>
+                                    <a href="https://plus.google.com/" target="_blank" style="display: inline-block; vertical-align: middle; margin-right: 5px;">
+                                        <img style="margin-top: 10px;" src="{{view url='images/email-icon/icon-3.png'}}" alt=""  style="display: block;" />
+                                    </a>
+                                    <a href="https://www.linkedin.com/company/bad-ass-outdoor-gear" target="_blank" style="display: inline-block; vertical-align: middle; margin-right: 5px;">
+                                        <img style="margin-top: 10px;" src="{{view url='images/email-icon/icon-4.png'}}" alt=""  style="display: block;" />
+                                    </a>
+                                    <a href="https://www.instagram.com/badassoutdoorgear/" target="_blank" style="display: inline-block; vertical-align: middle; margin-right: 5px;">
+                                        <img style="margin-top: 10px;" src="{{view url='images/email-icon/icon-5.png'}}" alt=""  style="display: block;" />
+                                    </a>
+                                    <a href="https://www.pinterest.com/badassoutdoor/" target="_blank" style="display: inline-block; vertical-align: middle; margin-right: 5px;">
+                                        <img style="margin-top: 10px;" src="{{view url='images/email-icon/icon-6.png'}}" alt=""  style="display: block;" />
+                                    </a>                                   
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" style="background: #f5f5f5;">
+                                    <p style="padding:10px 0px; font-family: arial; font-size: 13px; display: block; text-align: center; margin:0px;">
+                                        <a href="{{store direct_url=""}}" style="color: #333;">Home</a>  
+                                        &#124; <a href="{{store direct_url="archery-products.html"}}" style="color: #333;">Archery</a>
+                                        &#124; <a href="{{store direct_url="backpacks.html"}}" style="color: #333;">Backpacks</a>
+                                        &#124; <a href="{{store direct_url="clothing-for-hunters.html"}}" style="color: #333;">Clothing</a>
+                                        &#124; <a href="{{store direct_url="hunting-gear-products.html"}}" style="color: #333;">Gear</a>
+                                        &#124; <a href="{{store direct_url="optics-for-hunting.html"}}" style="color: #333;">Optics</a>
+                                        &#124; <a href="{{store direct_url="women-hunting-gear.html"}}" style="color: #333;">Women's</a>
+                                        &#124; <a href="{{store direct_url="products/product-brands.html"}}" style="color: #333;">Brands</a>
+                                    </p>
+                                    <p style="font-family: arial; text-align: center; font-size: 12px; font-weight: normal; display: block;color:#aaa;
+                                    padding: 0px 5%;">Copyright © 2016 Bad Ass Outdoor Gear. All rights reserved.</p>
+                                </td>
+                            </tr>                    
+                </table>
+                <!-- end footer part -->
+            </td>
+        </tr>
+    </table>
+</div>

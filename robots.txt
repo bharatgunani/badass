@@ -1,0 +1,64 @@
+# Robots.txt for badassoutdoorgear.com
+
+User-agent: *
+Disallow: /index.php/
+Disallow: /catalog/product_compare/
+Disallow: /catalog/category/view/
+Disallow: /catalog/product/view/
+Disallow: /wishlist/
+Disallow: /admin/
+Disallow: /catalogsearch/ 
+Disallow: /checkout/
+Disallow: /onestepcheckout/
+Disallow: /customer/
+Disallow: /review/product/
+Disallow: /sendfriend/
+Disallow: /enable-cookies/
+Disallow: /LICENSE.txt
+Disallow: /LICENSE.html
+#Disallow: /skin/
+Disallow: /js/
+Disallow: /directory/
+
+# Stop crawling user account and checkout pages by search engine robot:
+
+Disallow: /checkout/
+Disallow: /onestepcheckout/
+Disallow: /customer/
+Disallow: /customer/account/
+Disallow: /customer/account/login/
+
+# Blocking native catalog and search pages:
+Disallow: /catalogsearch/
+Disallow: /catalog/product_compare/
+Disallow: /catalog/category/view/
+Disallow: /catalog/product/view/
+
+# Sometimes Webmasters block pages with filters..
+Disallow: /*?dir*
+Disallow: /*?dir=desc
+Disallow: /*?dir=asc
+Disallow: /*?limit=all
+Disallow: /*?mode*
+Disallow: /*?price=*
+Disallow: /*?shop_by=*
+Disallow: /*?type=*
+Disallow: /*?main_color=*
+Disallow: /*?gender=*
+Disallow: /*?device_size=*
+Disallow: /*?q=*
+
+# Blocking CMS directories.
+Disallow: /app/
+Disallow: /bin/
+Disallow: /dev/
+Disallow: /lib/
+Disallow: /phpserver/
+#Disallow: /pub/
+
+# Blocking duplicate content:
+Disallow: /tag/
+Disallow: /rewiew/
+
+# Sitemap
+Sitemap: https://www.badassoutdoorgear.com/sitemap.xml

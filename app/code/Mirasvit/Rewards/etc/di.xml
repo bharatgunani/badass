@@ -1,0 +1,44 @@
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Framework\Console\CommandList">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="EarnTwitterPoints" xsi:type="object">Mirasvit\Rewards\Console\Command\EarnTwitterPointsCommand</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\SalesRule\Model\Validator">
+        <plugin name="RewardsRuleValidator" type="Mirasvit\Rewards\Plugin\SalesRuleValidator" sortOrder="10"/>
+    </type>
+    <preference for="Mirasvit\Rewards\Api\RewardsInterface" type="Mirasvit\Rewards\Model\Checkout\Rewards" />
+    <preference for="Mirasvit\Rewards\Api\Data\RewardsInterface" type="Mirasvit\Rewards\Model\Data\Rewards" />
+
+    <type name="Magento\Framework\Pricing\Adjustment\Collection">
+        <arguments>
+            <argument name="adjustments" xsi:type="array">
+                <item name="rewards_earn" xsi:type="const">Mirasvit\Rewards\Pricing\Adjustment::ADJUSTMENT_CODE</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Pricing\Adjustment\Pool">
+        <arguments>
+            <argument name="adjustments" xsi:type="array">
+                <item name="rewards_earn" xsi:type="array">
+                    <item name="className" xsi:type="string">Mirasvit\Rewards\Pricing\Adjustment</item>
+                    <item name="sortOrder" xsi:type="string">30</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Mirasvit\Report\Api\Repository\ReportRepositoryInterface">
+        <arguments>
+            <argument name="reports" xsi:type="array">
+                <item name="rewards_overview" xsi:type="string">Mirasvit\Rewards\Reports\Overview</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Mirasvit\Report\Ui\DataProvider">
+        <plugin name="override_filter" type="Mirasvit\Rewards\Plugin\DataProviderGroupFilter" sortOrder="1"/>
+    </type>
+</config>

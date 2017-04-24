@@ -1,0 +1,6 @@
+<?php /** @var \Mirasvit\Rewards\Pricing\Render\Adjustment $block */ ?>
+<?php if ($block->isShowPoints()): ?>
+    <span class="rewards__product-points">
+        <span class="price"><?php /* @escapeNotVerified */ echo $block->getPointsFormatted() ?></span>
+    </span>
+<?php endif; ?>
